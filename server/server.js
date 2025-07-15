@@ -1,7 +1,7 @@
 // Imports
 import express from "express";
-import { fileURLToPath } from "url";
-import { dirname } from "path";
+// import { fileURLToPath } from "url";
+// import { dirname } from "path";
 import dotenv from "dotenv";
 
 // Configura o dotenv
@@ -10,8 +10,8 @@ dotenv.config();
 // Constantes
 const port = process.env.PORT || 8080;
 const app = express();
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+// const __filename = fileURLToPath(import.meta.url);
+// const __dirname = dirname(__filename);
 
 // Middleares
 app.use(express.json()); // Para receber dados no formato JSON
