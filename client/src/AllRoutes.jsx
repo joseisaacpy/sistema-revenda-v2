@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "./Pages/Home";
 import NotFound from "./Pages/NotFound";
+import CadastroVeiculo from "./Pages/CadastroVeiculo";
 import MainLayout from "./Components/MainLayout"; // novo layout com o Header
 
 const AllRoutes = () => {
@@ -10,6 +11,7 @@ const AllRoutes = () => {
         {/* Rotas com layout padrão */}
         <Route element={<MainLayout />}>
           <Route path="/" element={<Home />} />
+          <Route path="/cadastro-veiculo" element={<CadastroVeiculo />} />
         </Route>
 
         {/* Página 404 fora do layout (opcional) */}
