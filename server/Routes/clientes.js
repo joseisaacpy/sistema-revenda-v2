@@ -29,7 +29,7 @@ router.post("/", async (req, res) => {
 
   try {
     await db.query(
-      `INSERT INTO clientes
+      `INSERT INTO clientes_nova
       (nome, cpf_cnpj, dataNascimento, email, telefone_celular, cep, rua, numero, bairro, cidade, estado)
       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)`,
       [
@@ -68,7 +68,9 @@ router.get("/", async (req, res) => {
 router.get("/:id", async (req, res) => {
   try {
     const { id } = req.params;
-    const cliente = await db.query("SELECT * FROM clientes WHERE id=$1", [id]);
+    const cliente = await db.query("SELECT * FROM clientes_nova WHERE id=$1", [
+      id,
+    ]);
     // Validação de cliente
     if (cliente.rows.length === 0) {
       return res.status(404).json({ error: "Cliente nao encontrado." });
@@ -100,7 +102,7 @@ router.put("/:id", async (req, res) => {
     } = req.body;
 
     const result = await db.query(
-      `UPDATE clientes 
+      `UPDATE clientes_nova 
        SET nome=$1, cpf_cnpj=$2, dataNascimento=$3, email=$4, telefone_celular=$5,
            cep=$6, rua=$7, numero=$8, bairro=$9, cidade=$10, estado=$11
        WHERE id=$12`,
@@ -136,7 +138,7 @@ router.delete("/:id", async (req, res) => {
   try {
     const { id } = req.params;
     const result = await db.query(
-      "DELETE FROM clientes WHERE id_cliente = $1",
+      "DELETE FROM clientes_nova WHERE id_cliente = $1",
       [id]
     );
     res.json({ message: "Cliente deletado com sucesso." });
