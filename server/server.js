@@ -3,6 +3,9 @@ import express from "express";
 // import { fileURLToPath } from "url";
 // import { dirname } from "path";
 import dotenv from "dotenv";
+// Rotas
+import clientesRoutes from "./Routes/clientes.js";
+import veiculosRoutes from "./Routes/veiculos.js";
 
 // Configura o dotenv
 dotenv.config();
@@ -18,6 +21,8 @@ app.use(express.json()); // Para receber dados no formato JSON
 app.use(express.urlencoded({ extended: true })); // Para receber dados de formulários
 
 // Rotas
+app.use("/api/clientes", clientesRoutes);
+app.use("/api/veiculos", veiculosRoutes);
 app.get("/", (req, res) => {
   res.send("Hello World!");
 });
