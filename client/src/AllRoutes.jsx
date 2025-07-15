@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "./Pages/Home";
 import NotFound from "./Pages/NotFound";
 import CadastroVeiculo from "./Pages/CadastroVeiculo";
+import CadastroCliente from "./Pages/CadastroCliente";
 import MainLayout from "./Components/MainLayout"; // novo layout com o Header
 
 const AllRoutes = () => {
@@ -12,6 +13,7 @@ const AllRoutes = () => {
         <Route element={<MainLayout />}>
           <Route path="/" element={<Home />} />
           <Route path="/cadastro-veiculo" element={<CadastroVeiculo />} />
+          <Route path="/cadastro-cliente" element={<CadastroCliente />} />
         </Route>
 
         {/* Página 404 fora do layout (opcional) */}
