@@ -16,7 +16,7 @@ const CadastroClientes = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const cliente = {};
+    const cliente = formData;
 
     try {
       const res = await fetch("/api/clientes", {

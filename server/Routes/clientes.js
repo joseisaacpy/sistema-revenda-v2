@@ -8,20 +8,35 @@ const router = express.Router();
 // Create
 router.post("/", async (req, res) => {
   const {
-    nome,
+    cod_cliente,
+    cod_reve,
     cpf_cnpj,
-    dataNascimento,
+    pessoa,
+    sexo,
+    nome,
+    telefone_celular,
+    telefone_residencial,
+    telefone_comercial,
+    rg,
+    ie,
+    data_nascimento,
+    data_cadastro,
     email,
-    telefone,
     cep,
     rua,
     numero,
     bairro,
-    cidade,
     estado,
+    cidade,
+    complemento,
+    cargo,
+    nome_mae,
+    nome_pai,
+    data_ultima_compra,
+    quantidade_veic_comprados,
   } = req.body;
 
-  if (!nome || !cpf_cnpj || !telefone) {
+  if (!nome || !cpf_cnpj || !telefone_celular) {
     return res.status(400).json({
       error: "Nome, CPF/CNPJ e Telefone são obrigatórios.",
     });
@@ -30,25 +45,41 @@ router.post("/", async (req, res) => {
   try {
     await db.query(
       `INSERT INTO clientes_nova
-      (nome, cpf_cnpj, dataNascimento, email, telefone_celular, cep, rua, numero, bairro, cidade, estado)
-      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)`,
+      (cod_cliente,cod_reve,cpf_cnpj,pessoa,sexo,nome,telefone_celular,telefone_residencial,telefone_comercial,rg,ie,data_nascimento,data_cadastro,email,cep,rua,numero,bairro,estado,cidade,complemento,cargo,nome_mae,nome_pai,data_ultima_compra,quantidade_veic_comprados,)
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21,$22,$23,$24,$25,$26)`,
+
       [
-        nome,
+        cod_cliente || null,
+        cod_reve || null,
         cpf_cnpj,
-        dataNascimento || null,
+        pessoa || null,
+        sexo || null,
+        nome,
+        telefone_celular,
+        telefone_residencial || null,
+        telefone_comercial || null,
+        rg || null,
+        ie || null,
+        data_nascimento || null,
+        data_cadastro || new Date(),
         email || null,
-        telefone,
         cep || null,
         rua || null,
         numero || null,
         bairro || null,
-        cidade || null,
         estado || null,
+        cidade || null,
+        complemento || null,
+        cargo || null,
+        nome_mae || null,
+        nome_pai || null,
+        data_ultima_compra || null,
+        quantidade_veic_comprados || 0,
       ]
     );
     res.status(201).json({ message: "Cliente criado com sucesso." });
   } catch (error) {
-    console.error("Erro ao criar o cliente:", error);
+    console.error("Erro ao criar o cliente:", error.message);
     res.status(500).json({ error: "Erro ao criar o cliente." });
   }
 });
