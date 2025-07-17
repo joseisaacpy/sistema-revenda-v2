@@ -1,13 +1,8 @@
 import { useState } from "react";
 // Para notificações
 import { ToastContainer, toast } from "react-toastify";
-// Loader
-import Loader from "../../Components/Loader";
 
 const CadastroClientes = () => {
-  // Estado para controlar o carregamento
-  const [loading, setLoading] = useState(false);
-
   // Estado para armazenar os dados (todos os campos iniciam vazios)
   const [formData, setFormData] = useState({
     cpf_cnpj: "",
@@ -80,9 +75,6 @@ const CadastroClientes = () => {
       return;
     }
 
-    // Exibe o loader
-    setLoading(true);
-
     // Começa a chamada assíncrona pra enviar os dados
     try {
       const url = `${import.meta.env.VITE_API_URL}/api/clientes`;
@@ -96,7 +88,32 @@ const CadastroClientes = () => {
         // Mostra uma mensagem de sucesso
         toast.success("Cliente cadastrado com sucesso!");
         // Limpa o formulário
-        setFormData({});
+        setFormData({
+          cpf_cnpj: "",
+          pessoa: "",
+          sexo: "",
+          nome: "",
+          telefone_celular: "",
+          telefone_residencial: "",
+          telefone_comercial: "",
+          rg: "",
+          ie: "",
+          data_nascimento: "",
+          data_cadastro: "",
+          email: "",
+          cep: "",
+          rua: "",
+          numero: "",
+          bairro: "",
+          estado: "",
+          cidade: "",
+          complemento: "",
+          cargo: "",
+          nome_mae: "",
+          nome_pai: "",
+          data_ultima_compra: "",
+          quantidade_veic_comprados: "",
+        });
         // Limpa os erros
         setErrors({});
       } else {
@@ -107,9 +124,6 @@ const CadastroClientes = () => {
     } catch (error) {
       toast.error("Erro de conexão. Tente novamente.");
       console.error("Erro ao enviar os dados:", error);
-    } finally {
-      setLoading(false);
-      console.log("Dados enviados:", formData);
     }
   };
 
@@ -131,6 +145,9 @@ const CadastroClientes = () => {
           onChange={handleChange}
           placeholder="Digite o CPF ou CNPJ"
         />
+        {errors.cpf_cnpj && (
+          <p className="text-red-600 text-sm">{errors.cpf_cnpj}</p>
+        )}
       </div>
 
       <div className="flex flex-col">
@@ -174,6 +191,7 @@ const CadastroClientes = () => {
           onChange={handleChange}
           placeholder="Digite o nome completo"
         />
+        {errors.nome && <p className="text-red-600 text-sm">{errors.nome}</p>}
       </div>
 
       <div className="flex flex-col">
@@ -271,6 +289,7 @@ const CadastroClientes = () => {
           type="email"
           placeholder="Digite o email"
         />
+        {errors.email && <p className="text-red-600 text-sm">{errors.email}</p>}
       </div>
 
       <div className="flex flex-col">
@@ -429,7 +448,18 @@ const CadastroClientes = () => {
         Cadastrar
       </button>
 
-      <ToastContainer />
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="colored"
+      />
     </form>
   );
 };

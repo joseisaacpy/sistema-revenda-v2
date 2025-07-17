@@ -12,21 +12,64 @@ const ListarClientes = () => {
   const [loading, setLoading] = useState(true); // Estado para controlar o carregamento
 
   // Função de editar um cliente
+  // Função pra confirmar a exclusão de um cliente
+  function ConfirmDelete({ onConfirm, onCancel }) {
+    return (
+      <div>
+        <p>Deseja realmente deletar o cliente?</p>
+        <div className="mt-2.5 text-right">
+          <button
+            className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded mr-2.5"
+            onClick={() => {
+              onConfirm();
+              toast.dismiss(); // fecha o toast
+            }}
+          >
+            Confirmar
+          </button>
+          <button
+            className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded"
+            onClick={() => {
+              onCancel();
+              toast.dismiss(); // fecha o toast
+            }}
+          >
+            {" "}
+            Cancelar
+          </button>
+        </div>
+      </div>
+    );
+  }
   // Função de deletar um cliente
-  async function deletarCliente(cod_cliente) {
-    try {
-      const url = `${import.meta.env.VITE_API_URL}/api/clientes/${cod_cliente}`;
-      const response = await fetch(url, {
-        method: "DELETE",
-      });
-      if (response.ok) {
-        toast.success("Cliente deletado com sucesso!");
-        buscarClientes();
+  async function deletarCliente(id, nome) {
+    const handleConfirm = async () => {
+      try {
+        const url = `${import.meta.env.VITE_API_URL}/api/clientes/${id}`;
+        const response = await fetch(url, { method: "DELETE" });
+        if (response.ok) {
+          toast.success(`Sr(a) ${nome} deletado com sucesso!`);
+          buscarClientes();
+        } else {
+          toast.error("Erro ao deletar cliente!");
+        }
+      } catch (error) {
+        toast.error("Erro ao deletar cliente!");
+        console.error(error);
       }
-      toast.error("Erro ao deletar cliente!");
-    } catch (error) {
-      console.log("Erro ao deletar cliente:", error);
-    }
+    };
+
+    const handleCancel = () => {
+      // Opcional: aqui você pode colocar algo caso o usuário cancele
+    };
+
+    toast.info(
+      <ConfirmDelete onConfirm={handleConfirm} onCancel={handleCancel} />,
+      {
+        autoClose: false, // Não fecha automaticamente para o usuário decidir
+        closeButton: false, // Remove o botão de fechar padrão para forçar ação
+      }
+    );
   }
 
   // Buscar todos os clientes
@@ -95,7 +138,7 @@ const ListarClientes = () => {
                   </button>
                   <button
                     className="cursor-pointer"
-                    onClick={() => deletarCliente(cliente.cod_cliente)}
+                    onClick={() => deletarCliente(cliente.id, cliente.nome)}
                   >
                     {/* Chamar função de exclusão */}
                     <FaTrash className="text-red-700" />
@@ -106,6 +149,18 @@ const ListarClientes = () => {
           </tbody>
         </table>
       </div>
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
     </section>
   );
 };
