@@ -5,7 +5,7 @@ import db from "../Database/connection.js";
 // CONSTANTES
 const router = express.Router();
 
-// CREATE (único Carro)
+// CREATE
 router.post("/", async (req, res) => {
   const {
     chassi,
@@ -44,7 +44,7 @@ router.post("/", async (req, res) => {
 
   try {
     await db.query(
-      `INSERT INTO carros 
+      `INSERT INTO veiculos_estoque 
       (chassi, placa, marca, modelo, ano_modelo, cor, combustivel, km, valor_compra, valor_venda_sugerido, status_estoque, data_compra) 
       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)`,
       [
@@ -62,24 +62,24 @@ router.post("/", async (req, res) => {
         data_compra,
       ]
     );
-    res.status(201).json({ message: "Carro cadastrado com sucesso." });
+    res.status(201).json({ message: "Veículo cadastrado com sucesso." });
   } catch (error) {
-    console.error("Erro ao cadastrar carro:", error);
-    res.status(500).json({ error: "Erro ao cadastrar carro." });
+    console.error("Erro ao cadastrar veículo:", error);
+    res.status(500).json({ error: "Erro ao cadastrar veículo." });
   }
 });
 
 // READ (todos)
 router.get("/", async (req, res) => {
   try {
-    const result = await db.query("SELECT * FROM carros");
+    const result = await db.query("SELECT * FROM veiculos_estoque");
     if (result.rows.length === 0) {
-      return res.status(404).json({ error: "Nenhum Carro encontrado." });
+      return res.status(404).json({ error: "Nenhum veículo encontrado." });
     }
     res.json(result.rows);
   } catch (error) {
-    console.error("Erro ao buscar Carros:", error);
-    res.status(500).json({ error: "Erro ao buscar Carros." });
+    console.error("Erro ao buscar veículos:", error);
+    res.status(500).json({ error: "Erro ao buscar veículos." });
   }
 });
 
@@ -87,14 +87,14 @@ router.get("/", async (req, res) => {
 router.get("/:id", async (req, res) => {
   const { id } = req.params;
   try {
-    const result = await db.query("SELECT * FROM carros WHERE id = $1", [id]);
+    const result = await db.query("SELECT * FROM veiculos_estoque WHERE id = $1", [id]);
     if (result.rows.length === 0) {
-      return res.status(404).json({ error: "Carro não encontrado." });
+      return res.status(404).json({ error: "Veículo não encontrado." });
     }
     res.json(result.rows[0]);
   } catch (error) {
-    console.error("Erro ao buscar Carro:", error);
-    res.status(500).json({ error: "Erro ao buscar Carro." });
+    console.error("Erro ao buscar veículo:", error);
+    res.status(500).json({ error: "Erro ao buscar veículo." });
   }
 });
 
@@ -118,7 +118,7 @@ router.put("/:id", async (req, res) => {
 
   try {
     const result = await db.query(
-      `UPDATE carros 
+      `UPDATE veiculos_estoque 
       SET chassi = $1, placa = $2, marca = $3, modelo = $4, ano_modelo = $5, cor = $6, combustivel = $7, km = $8, valor_compra = $9, valor_venda_sugerido = $10, status_estoque = $11, data_compra = $12
       WHERE id = $13`,
       [
@@ -139,13 +139,13 @@ router.put("/:id", async (req, res) => {
     );
 
     if (result.rowCount === 0) {
-      return res.status(404).json({ error: "Carro não encontrado." });
+      return res.status(404).json({ error: "Veículo não encontrado." });
     }
 
-    res.json({ message: "Carro atualizado com sucesso." });
+    res.json({ message: "Veículo atualizado com sucesso." });
   } catch (error) {
-    console.error("Erro ao atualizar Carro:", error);
-    res.status(500).json({ error: "Erro ao atualizar Carro." });
+    console.error("Erro ao atualizar veículo:", error);
+    res.status(500).json({ error: "Erro ao atualizar veículo." });
   }
 });
 
@@ -159,13 +159,13 @@ router.delete("/:id", async (req, res) => {
     ]);
 
     if (result.rowCount === 0) {
-      return res.status(404).json({ error: "Carro não encontrado." });
+      return res.status(404).json({ error: "Veículo não encontrado." });
     }
 
-    res.json({ message: "Carro deletado com sucesso." });
+    res.json({ message: "Veículo deletado com sucesso." });
   } catch (error) {
-    console.error("Erro ao deletar Carro:", error);
-    res.status(500).json({ error: "Erro ao deletar Carro." });
+    console.error("Erro ao deletar veículo:", error);
+    res.status(500).json({ error: "Erro ao deletar veículo." });
   }
 });
 

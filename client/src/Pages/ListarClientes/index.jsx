@@ -6,41 +6,14 @@ import { useState, useEffect } from "react";
 import Loader from "../../Components/Loader";
 // Toastify pra notificações
 import { ToastContainer, toast } from "react-toastify";
+// Componente pra confirmar a exclusão
+import ConfirmDeleteToast from "../../Components/ConfirmDeleteToast";
 
 const ListarClientes = () => {
   const [clientes, setClientes] = useState([]); // Estado para armazenar os clientes
   const [loading, setLoading] = useState(true); // Estado para controlar o carregamento
 
   // Função de editar um cliente
-  // Função pra confirmar a exclusão de um cliente
-  function ConfirmDelete({ onConfirm, onCancel }) {
-    return (
-      <div>
-        <p>Deseja realmente deletar o cliente?</p>
-        <div className="mt-2.5 text-right">
-          <button
-            className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded mr-2.5"
-            onClick={() => {
-              onConfirm();
-              toast.dismiss(); // fecha o toast
-            }}
-          >
-            Confirmar
-          </button>
-          <button
-            className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded"
-            onClick={() => {
-              onCancel();
-              toast.dismiss(); // fecha o toast
-            }}
-          >
-            {" "}
-            Cancelar
-          </button>
-        </div>
-      </div>
-    );
-  }
   // Função de deletar um cliente
   async function deletarCliente(id, nome) {
     const handleConfirm = async () => {
@@ -63,8 +36,9 @@ const ListarClientes = () => {
       // Opcional: aqui você pode colocar algo caso o usuário cancele
     };
 
+    // Chama o toast de confirmação
     toast.info(
-      <ConfirmDelete onConfirm={handleConfirm} onCancel={handleCancel} />,
+      <ConfirmDeleteToast onConfirm={handleConfirm} onCancel={handleCancel} />,
       {
         autoClose: false, // Não fecha automaticamente para o usuário decidir
         closeButton: false, // Remove o botão de fechar padrão para forçar ação
