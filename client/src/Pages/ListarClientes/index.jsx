@@ -30,14 +30,45 @@ const ListarClientes = () => {
   }
 
   return (
-    <section>
-      <ul>
-        {clientes.map((cliente) => (
-          <li key={cliente.id}>
-            <h2 className="text-lg font-semibold">{cliente.nome}</h2>
-          </li>
-        ))}
-      </ul>
+    <section className="p-4">
+      <h1 className="text-2xl font-semibold mb-4">
+        Lista de Clientes Cadastrados
+      </h1>
+      <p className="mb-4">
+        Quantidade de Clientes:{" "}
+        <span className="font-bold">{clientes.length}</span>
+      </p>
+      <div className="overflow-x-auto">
+        <table className="min-w-full border border-gray-300">
+          <thead className="bg-gray-100">
+            <tr>
+              <th className="text-left p-2 border sticky left-0 z-10">Nome</th>
+              <th className="text-left p-2 border">CPF/CNPJ</th>
+              <th className="text-left p-2 border">Telefone</th>
+              <th className="text-left p-2 border">Data de Nascimento</th>
+              <th className="text-left p-2 border">Qtde. Veic. Comprados</th>
+            </tr>
+          </thead>
+          <tbody>
+            {clientes.map((cliente) => (
+              <tr
+                key={cliente.nome}
+                className="even:bg-gray-100 odd:bg-gray-300"
+              >
+                <td className="p-2 border sticky left-0 z-10">
+                  {cliente.nome}
+                </td>
+                <td className="p-2 border">{cliente.cpf_cnpj}</td>
+                <td className="p-2 border">{cliente.telefone_celular}</td>
+                <td className="p-2 border">{cliente.data_nascimento}</td>
+                <td className="p-2 border">
+                  {cliente.quantidade_veic_comprados}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </section>
   );
 };
