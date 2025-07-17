@@ -4,10 +4,30 @@ import { FaEdit, FaTrash } from "react-icons/fa";
 import { useState, useEffect } from "react";
 // Loader
 import Loader from "../../Components/Loader";
+// Toastify pra notificações
+import { ToastContainer, toast } from "react-toastify";
 
 const ListarClientes = () => {
   const [clientes, setClientes] = useState([]); // Estado para armazenar os clientes
   const [loading, setLoading] = useState(true); // Estado para controlar o carregamento
+
+  // Função de editar um cliente
+  // Função de deletar um cliente
+  async function deletarCliente(cod_cliente) {
+    try {
+      const url = `${import.meta.env.VITE_API_URL}/api/clientes/${cod_cliente}`;
+      const response = await fetch(url, {
+        method: "DELETE",
+      });
+      if (response.ok) {
+        toast.success("Cliente deletado com sucesso!");
+        buscarClientes();
+      }
+      toast.error("Erro ao deletar cliente!");
+    } catch (error) {
+      console.log("Erro ao deletar cliente:", error);
+    }
+  }
 
   // Buscar todos os clientes
   async function buscarClientes() {
@@ -23,6 +43,7 @@ const ListarClientes = () => {
     }
   }
 
+  // Chama a função buscarClientes ao montar o componente
   useEffect(() => {
     buscarClientes();
   }, []);
@@ -68,10 +89,15 @@ const ListarClientes = () => {
                   {cliente.quantidade_veic_comprados}
                 </td>
                 <td className="p-2 border">
-                  <button className="mr-2">
+                  {/* Chamar a tela de edição */}
+                  <button className="mr-2 cursor-pointer">
                     <FaEdit className="text-blue-700" />
                   </button>
-                  <button>
+                  <button
+                    className="cursor-pointer"
+                    onClick={() => deletarCliente(cliente.cod_cliente)}
+                  >
+                    {/* Chamar função de exclusão */}
                     <FaTrash className="text-red-700" />
                   </button>
                 </td>
