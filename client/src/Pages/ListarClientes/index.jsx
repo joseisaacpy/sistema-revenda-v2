@@ -1,11 +1,13 @@
+// Importa icones
+import { FaEdit, FaTrash } from "react-icons/fa";
+// Importa as bibliotecas
 import { useState, useEffect } from "react";
+// Loader
 import Loader from "../../Components/Loader";
 
 const ListarClientes = () => {
-  const [clientes, setClientes] = useState([]);
+  const [clientes, setClientes] = useState([]); // Estado para armazenar os clientes
   const [loading, setLoading] = useState(true); // Estado para controlar o carregamento
-
-  // const [paginaAtual, setPaginaAtual] = useState(1);
 
   // Buscar todos os clientes
   async function buscarClientes() {
@@ -47,6 +49,7 @@ const ListarClientes = () => {
               <th className="text-left p-2 border">Telefone</th>
               <th className="text-left p-2 border">Data de Nascimento</th>
               <th className="text-left p-2 border">Qtde. Veic. Comprados</th>
+              <th className="text-left p-2 border">Ações</th>
             </tr>
           </thead>
           <tbody>
@@ -63,6 +66,14 @@ const ListarClientes = () => {
                 <td className="p-2 border">{cliente.data_nascimento}</td>
                 <td className="p-2 border">
                   {cliente.quantidade_veic_comprados}
+                </td>
+                <td className="p-2 border">
+                  <button className="mr-2">
+                    <FaEdit className="text-blue-700" />
+                  </button>
+                  <button>
+                    <FaTrash className="text-red-700" />
+                  </button>
                 </td>
               </tr>
             ))}
