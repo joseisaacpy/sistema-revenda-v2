@@ -8,8 +8,6 @@ const router = express.Router();
 // Create
 router.post("/", async (req, res) => {
   const {
-    cod_cliente,
-    cod_reve,
     cpf_cnpj,
     pessoa,
     sexo,
@@ -43,38 +41,40 @@ router.post("/", async (req, res) => {
   }
 
   try {
+    // Funções para auxiliar na limpeza dos dados
+    const sanitize = (value) => (value && value.trim() !== "" ? value : null);
+    const parseNumber = (value) => Number(value) || 0;
+
     await db.query(
       `INSERT INTO clientes_nova
-      (cod_cliente,cod_reve,cpf_cnpj,pessoa,sexo,nome,telefone_celular,telefone_residencial,telefone_comercial,rg,ie,data_nascimento,data_cadastro,email,cep,rua,numero,bairro,estado,cidade,complemento,cargo,nome_mae,nome_pai,data_ultima_compra,quantidade_veic_comprados,)
-      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21,$22,$23,$24,$25,$26)`,
+      (cpf_cnpj,pessoa,sexo,nome,telefone_celular,telefone_residencial,telefone_comercial,rg,ie,data_nascimento,data_cadastro,email,cep,rua,numero,bairro,estado,cidade,complemento,cargo,nome_mae,nome_pai,data_ultima_compra,quantidade_veic_comprados)
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21,$22,$23,$24)`,
 
       [
-        cod_cliente || null,
-        cod_reve || null,
         cpf_cnpj,
-        pessoa || null,
-        sexo || null,
+        sanitize(pessoa),
+        sanitize(sexo),
         nome,
         telefone_celular,
-        telefone_residencial || null,
-        telefone_comercial || null,
-        rg || null,
-        ie || null,
-        data_nascimento || null,
-        data_cadastro || new Date(),
-        email || null,
-        cep || null,
-        rua || null,
-        numero || null,
-        bairro || null,
-        estado || null,
-        cidade || null,
-        complemento || null,
-        cargo || null,
-        nome_mae || null,
-        nome_pai || null,
-        data_ultima_compra || null,
-        quantidade_veic_comprados || 0,
+        sanitize(telefone_residencial),
+        sanitize(telefone_comercial),
+        sanitize(rg),
+        sanitize(ie),
+        sanitize(data_nascimento),
+        sanitize(data_cadastro) || new Date(),
+        sanitize(email),
+        sanitize(cep),
+        sanitize(rua),
+        sanitize(numero),
+        sanitize(bairro),
+        sanitize(estado),
+        sanitize(cidade),
+        sanitize(complemento),
+        sanitize(cargo),
+        sanitize(nome_mae),
+        sanitize(nome_pai),
+        sanitize(data_ultima_compra),
+        parseNumber(quantidade_veic_comprados),
       ]
     );
     res.status(201).json({ message: "Cliente criado com sucesso." });
@@ -169,7 +169,7 @@ router.delete("/:id", async (req, res) => {
   try {
     const { id } = req.params;
     const result = await db.query(
-      "DELETE FROM clientes_nova WHERE id_cliente = $1",
+      "DELETE FROM clientes_nova WHERE id = $1",
       [id]
     );
     res.json({ message: "Cliente deletado com sucesso." });

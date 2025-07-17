@@ -1,9 +1,40 @@
 import { useState } from "react";
 // Para notificações
 import { ToastContainer, toast } from "react-toastify";
+// Loader
+import Loader from "../../Components/Loader";
 
 const CadastroClientes = () => {
-  const [formData, setFormData] = useState({});
+  // Estado para controlar o carregamento
+  const [loading, setLoading] = useState(false);
+
+  // Estado para armazenar os dados (todos os campos iniciam vazios)
+  const [formData, setFormData] = useState({
+    cpf_cnpj: "",
+    pessoa: "",
+    sexo: "",
+    nome: "",
+    telefone_celular: "",
+    telefone_residencial: "",
+    telefone_comercial: "",
+    rg: "",
+    ie: "",
+    data_nascimento: "",
+    data_cadastro: "",
+    email: "",
+    cep: "",
+    rua: "",
+    numero: "",
+    bairro: "",
+    estado: "",
+    cidade: "",
+    complemento: "",
+    cargo: "",
+    nome_mae: "",
+    nome_pai: "",
+    data_ultima_compra: "",
+    quantidade_veic_comprados: "",
+  });
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -13,34 +44,72 @@ const CadastroClientes = () => {
     }));
   };
 
+  // Estado pra armazenar os erros
+  const [errors, setErrors] = useState({});
+
+  // Função para validar o formulário
+  const validateForm = () => {
+    // Objeto para armazenar os erros
+    const newErrors = {};
+
+    // Campos obrigatórios
+    if (!formData.nome?.trim()) {
+      newErrors.nome = "Nome é obrigatório";
+    }
+
+    if (!formData.cpf_cnpj?.trim()) {
+      newErrors.cpf_cnpj = "CPF/CNPJ é obrigatório";
+    }
+
+    // Validação de email
+    if (formData.email && !/\S+@\S+\.\S+/.test(formData.email)) {
+      newErrors.email = "Email inválido";
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  // Função pra lidar com o envio do formulário
   const handleSubmit = async (e) => {
-    e.preventDefault();
+    e.preventDefault(); // Impede o envio do formulário
 
-    const cliente = formData;
+    // Valida o formulário
+    if (!validateForm()) {
+      toast.error("Corrija os erros e tente novamente!");
+      return;
+    }
 
+    // Exibe o loader
+    setLoading(true);
+
+    // Começa a chamada assíncrona pra enviar os dados
     try {
-      const res = await fetch("/api/clientes", {
+      const url = `${import.meta.env.VITE_API_URL}/api/clientes`;
+      const res = await fetch(url, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(cliente),
+        body: JSON.stringify(formData),
       });
-
-      const data = await res.json();
 
       if (res.ok) {
         // Mostra uma mensagem de sucesso
         toast.success("Cliente cadastrado com sucesso!");
         // Limpa o formulário
         setFormData({});
+        // Limpa os erros
+        setErrors({});
       } else {
+        const errorData = await res.json();
         // Mostra uma mensagem de erro
-        toast.error("Erro ao cadastrar cliente!");
-        console.error("Erro ao cadastrar cliente:", data);
+        toast.error(errorData.message || "Erro ao cadastrar cliente!");
       }
     } catch (error) {
-      // Mostra uma mensagem de erro
-      toast.error("Erro ao cadastrar cliente!");
-      console.error("Erro ao cadastrar cliente:", error);
+      toast.error("Erro de conexão. Tente novamente.");
+      console.error("Erro ao enviar os dados:", error);
+    } finally {
+      setLoading(false);
+      console.log("Dados enviados:", formData);
     }
   };
 
