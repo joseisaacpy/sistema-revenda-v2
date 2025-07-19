@@ -80,29 +80,26 @@ const ListarVeiculos = () => {
         <table className="min-w-full border border-gray-300">
           <thead className="bg-gray-100">
             <tr>
-              <th className="text-left p-2 border sticky left-0 z-10">Nome</th>
-              <th className="text-left p-2 border">CPF/CNPJ</th>
-              <th className="text-left p-2 border">Telefone</th>
-              <th className="text-left p-2 border">Data de Nascimento</th>
-              <th className="text-left p-2 border">Qtde. Veic. Comprados</th>
+              <th className="text-left p-2 border sticky left-0 z-10">Placa</th>
+              <th className="text-left p-2 border">Modelo</th>
+              <th className="text-left p-2 border">Ano</th>
+              <th className="text-left p-2 border">Cor</th>
+              <th className="text-left p-2 border">Km</th>
+              <th className="text-left p-2 border">Valor</th>
+              <th className="text-left p-2 border">Tipo</th>
               <th className="text-left p-2 border">Ações</th>
             </tr>
           </thead>
           <tbody>
             {veiculos.map((veiculo) => (
-              <tr
-                key={veiculo.nome}
-                className="even:bg-gray-100 odd:bg-gray-300"
-              >
-                <td className="p-2 border sticky left-0 z-10">
-                  {veiculo.nome}
-                </td>
-                <td className="p-2 border">{veiculo.cpf_cnpj}</td>
-                <td className="p-2 border">{veiculo.telefone_celular}</td>
-                <td className="p-2 border">{veiculo.data_nascimento}</td>
-                <td className="p-2 border">
-                  {veiculo.quantidade_veic_comprados}
-                </td>
+              <tr key={veiculo.id} className="even:bg-gray-100 odd:bg-gray-300">
+                <td className="p-2 border">{veiculo.placa}</td>
+                <td className="p-2 border">{veiculo.modelo}</td>
+                <td className="p-2 border">{veiculo.ano_modelo}</td>
+                <td className="p-2 border">{veiculo.cor}</td>
+                <td className="p-2 border">{veiculo.km}</td>
+                <td className="p-2 border">{veiculo.valor_compra}</td>
+                <td className="p-2 border">{veiculo.tipo}</td>
                 <td className="p-2 border">
                   {/* Chamar a tela de edição */}
                   <button className="mr-2 cursor-pointer">
