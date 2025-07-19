@@ -142,8 +142,10 @@ const CadastroClientes = () => {
           id="cpf_cnpj"
           name="cpf_cnpj"
           value={formData.cpf_cnpj}
-          onChange={handleChange}
+          minLength={11}
+          maxLength={18}
           placeholder="Digite o CPF ou CNPJ"
+          onChange={handleChange}
         />
         {errors.cpf_cnpj && (
           <p className="text-red-600 text-sm">{errors.cpf_cnpj}</p>
@@ -201,8 +203,10 @@ const CadastroClientes = () => {
           id="telefone_celular"
           name="telefone_celular"
           value={formData.telefone_celular}
-          onChange={handleChange}
+          minLength={10}
+          maxLength={15}
           placeholder="(xx) xxxxx-xxxx"
+          onChange={handleChange}
         />
       </div>
 
@@ -213,8 +217,10 @@ const CadastroClientes = () => {
           id="telefone_residencial"
           name="telefone_residencial"
           value={formData.telefone_residencial}
-          onChange={handleChange}
+          minLength={10}
+          maxLength={15}
           placeholder="(xx) xxxxx-xxxx"
+          onChange={handleChange}
         />
       </div>
 
@@ -225,8 +231,10 @@ const CadastroClientes = () => {
           id="telefone_comercial"
           name="telefone_comercial"
           value={formData.telefone_comercial}
-          onChange={handleChange}
+          minLength={10}
+          maxLength={15}
           placeholder="(xx) xxxxx-xxxx"
+          onChange={handleChange}
         />
       </div>
 
@@ -237,8 +245,10 @@ const CadastroClientes = () => {
           id="rg"
           name="rg"
           value={formData.rg}
-          onChange={handleChange}
+          minLength={5}
+          maxLength={20}
           placeholder="Digite o RG"
+          onChange={handleChange}
         />
       </div>
 
@@ -249,8 +259,10 @@ const CadastroClientes = () => {
           id="ie"
           name="ie"
           value={formData.ie}
-          onChange={handleChange}
+          minLength={5}
+          maxLength={20}
           placeholder="Digite a IE"
+          onChange={handleChange}
         />
       </div>
 
@@ -261,8 +273,8 @@ const CadastroClientes = () => {
           id="data_nascimento"
           name="data_nascimento"
           value={formData.data_nascimento}
-          onChange={handleChange}
           type="date"
+          onChange={handleChange}
         />
       </div>
 
@@ -273,8 +285,8 @@ const CadastroClientes = () => {
           id="data_cadastro"
           name="data_cadastro"
           value={formData.data_cadastro}
-          onChange={handleChange}
           type="date"
+          onChange={handleChange}
         />
       </div>
 
@@ -299,8 +311,10 @@ const CadastroClientes = () => {
           id="cep"
           name="cep"
           value={formData.cep}
-          onChange={handleChange}
+          minLength={8}
+          maxLength={9}
           placeholder="Digite o CEP"
+          onChange={handleChange}
         />
       </div>
 
@@ -311,8 +325,8 @@ const CadastroClientes = () => {
           id="rua"
           name="rua"
           value={formData.rua}
-          onChange={handleChange}
           placeholder="Digite a rua"
+          onChange={handleChange}
         />
       </div>
 
@@ -323,9 +337,11 @@ const CadastroClientes = () => {
           id="numero"
           name="numero"
           value={formData.numero}
-          onChange={handleChange}
+          minLength={1}
+          maxLength={10}
           type="number"
           placeholder="Digite o número da casa"
+          onChange={handleChange}
         />
       </div>
 
@@ -336,8 +352,8 @@ const CadastroClientes = () => {
           id="bairro"
           name="bairro"
           value={formData.bairro}
-          onChange={handleChange}
           placeholder="Digite o bairro"
+          onChange={handleChange}
         />
       </div>
 
@@ -348,8 +364,10 @@ const CadastroClientes = () => {
           id="estado"
           name="estado"
           value={formData.estado}
-          onChange={handleChange}
+          minLength={2}
+          maxLength={2}
           placeholder="Digite o estado (apenas a sigla)"
+          onChange={handleChange}
         />
       </div>
 
@@ -360,8 +378,8 @@ const CadastroClientes = () => {
           id="cidade"
           name="cidade"
           value={formData.cidade}
-          onChange={handleChange}
           placeholder="Digite a cidade"
+          onChange={handleChange}
         />
       </div>
 

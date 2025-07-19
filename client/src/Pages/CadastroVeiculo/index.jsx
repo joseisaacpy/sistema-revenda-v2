@@ -3,6 +3,7 @@ import { useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 
 const CadastroVeiculos = () => {
+  // Dados do formulário
   const [formData, setFormData] = useState({
     modelo: "",
     marca: "",
@@ -19,6 +20,7 @@ const CadastroVeiculos = () => {
     data_compra: "",
   });
 
+  // Função pra lidar com o preenchimento do formulário
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
@@ -27,9 +29,11 @@ const CadastroVeiculos = () => {
     }));
   };
 
+  // Função pra lidar com o envio do formulário
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    // Adiciona os dados enviados numa variável, mas com uma pequena modificação dos tipos
     const veiculo = {
       ...formData,
       ano_modelo: parseInt(formData.ano_modelo),
@@ -38,8 +42,10 @@ const CadastroVeiculos = () => {
       valor_venda_sugerido: parseFloat(formData.valor_venda_sugerido),
     };
 
+    // Fazendo o envio dos dados
     try {
-      const res = await fetch("/api/veiculos", {
+      const url = `${import.meta.env.VITE_API_URL}/api/veiculos`;
+      const res = await fetch(url, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(veiculo),
@@ -116,8 +122,10 @@ const CadastroVeiculos = () => {
           id="chassi"
           name="chassi"
           value={formData.chassi}
-          onChange={handleChange}
+          minLength={17}
+          maxLength={17}
           placeholder="Digite o número do chassi"
+          onChange={handleChange}
         />
       </div>
 
@@ -128,8 +136,10 @@ const CadastroVeiculos = () => {
           id="placa"
           name="placa"
           value={formData.placa}
-          onChange={handleChange}
+          minLength={7}
+          maxLength={7}
           placeholder="Ex: ABC1D23"
+          onChange={handleChange}
         />
       </div>
 
@@ -140,8 +150,10 @@ const CadastroVeiculos = () => {
           id="renavam"
           name="renavam"
           value={formData.renavam}
-          onChange={handleChange}
+          minLength={9}
+          maxLength={11}
           placeholder="Digite o número do Renavam"
+          onChange={handleChange}
         />
       </div>
 
@@ -152,9 +164,10 @@ const CadastroVeiculos = () => {
           id="ano_modelo"
           name="ano_modelo"
           value={formData.ano_modelo}
-          onChange={handleChange}
+          minLength={4}
           placeholder="Ano Modelo"
           type="number"
+          onChange={handleChange}
         />
       </div>
 
