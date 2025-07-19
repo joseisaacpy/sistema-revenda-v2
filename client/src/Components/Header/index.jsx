@@ -37,7 +37,10 @@ const Header = () => {
       {/* Barra de navegação */}
       <nav className="bg-gray-900 text-white p-4 flex items-center justify-between md:justify-around">
         {/* Logo */}
-        <Link to="/" className="flex items-center gap-2">
+        <Link
+          to="/"
+          className="flex items-center gap-2  hover:text-yellow-400 transition-all duration-300"
+        >
           <FaTruckPickup className="text-4xl" />
           <h1 className="hidden md:block text-2xl font-bold">
             Só Caminhonetes
@@ -115,14 +118,17 @@ const Header = () => {
         {/* Ul */}
         <ul className="hidden md:flex gap-6 text-sm" id="menu">
           <li>
-            <Link className="flex items-center gap-1 hover:underline" to="/">
+            <Link
+              className="flex items-center gap-1 transition-transform duration-300 hover:scale-105 hover:text-yellow-400"
+              to="/"
+            >
               <FaHome />
               Home
             </Link>
           </li>
           <li>
             <Link
-              className="flex items-center gap-1 hover:underline"
+              className="flex items-center gap-1 transition-transform duration-300 hover:scale-105 hover:text-yellow-400"
               to="/cadastro-cliente"
             >
               <FaUserPlus />
@@ -131,7 +137,7 @@ const Header = () => {
           </li>
           <li>
             <Link
-              className="flex items-center gap-1 hover:underline"
+              className="flex items-center gap-1 transition-transform duration-300 hover:scale-105 hover:text-yellow-400"
               to="/cadastro-veiculo"
             >
               <FaCarSide />
@@ -140,7 +146,7 @@ const Header = () => {
           </li>
           <li>
             <Link
-              className="flex items-center gap-1 hover:underline"
+              className="flex items-center gap-1 transition-transform duration-300 hover:scale-105 hover:text-yellow-400"
               to="/veiculos"
             >
               <FaTruckPickup />
@@ -149,7 +155,7 @@ const Header = () => {
           </li>
           <li>
             <Link
-              className="flex items-center gap-1 hover:underline"
+              className="flex items-center gap-1 transition-transform duration-300 hover:scale-105 hover:text-yellow-400"
               to="/clientes"
             >
               <FaUsers />
