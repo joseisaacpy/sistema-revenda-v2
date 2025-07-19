@@ -13,7 +13,6 @@ router.post("/", async (req, res) => {
     sexo,
     nome,
     telefone_celular,
-    telefone_residencial,
     telefone_comercial,
     rg,
     ie,
@@ -47,8 +46,8 @@ router.post("/", async (req, res) => {
 
     await db.query(
       `INSERT INTO clientes_nova
-      (cpf_cnpj,pessoa,sexo,nome,telefone_celular,telefone_residencial,telefone_comercial,rg,ie,data_nascimento,data_cadastro,email,cep,rua,numero,bairro,estado,cidade,complemento,cargo,nome_mae,nome_pai,data_ultima_compra,quantidade_veic_comprados)
-      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21,$22,$23,$24)`,
+      (cpf_cnpj,pessoa,sexo,nome,telefone_celular,telefone_comercial,rg,ie,data_nascimento,data_cadastro,email,cep,rua,numero,bairro,estado,cidade,complemento,cargo,nome_mae,nome_pai,data_ultima_compra,quantidade_veic_comprados)
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21,$22,$23)`,
 
       [
         cpf_cnpj,
@@ -56,7 +55,6 @@ router.post("/", async (req, res) => {
         sanitize(sexo),
         nome,
         telefone_celular,
-        sanitize(telefone_residencial),
         sanitize(telefone_comercial),
         sanitize(rg),
         sanitize(ie),
@@ -168,10 +166,9 @@ router.put("/:id", async (req, res) => {
 router.delete("/:id", async (req, res) => {
   try {
     const { id } = req.params;
-    const result = await db.query(
-      "DELETE FROM clientes_nova WHERE id = $1",
-      [id]
-    );
+    const result = await db.query("DELETE FROM clientes_nova WHERE id = $1", [
+      id,
+    ]);
     res.json({ message: "Cliente deletado com sucesso." });
     // Valida se o cliente foi deletado
     if (result.rowCount === 0) {

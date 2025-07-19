@@ -1,6 +1,8 @@
 import { useState } from "react";
 // Para notificações
 import { ToastContainer, toast } from "react-toastify";
+// Para criar máscara nos inputs
+import InputMask from "react-input-mask";
 
 const CadastroClientes = () => {
   // Estado para armazenar os dados (todos os campos iniciam vazios)
@@ -10,7 +12,6 @@ const CadastroClientes = () => {
     sexo: "",
     nome: "",
     telefone_celular: "",
-    telefone_residencial: "",
     telefone_comercial: "",
     rg: "",
     ie: "",
@@ -94,7 +95,6 @@ const CadastroClientes = () => {
           sexo: "",
           nome: "",
           telefone_celular: "",
-          telefone_residencial: "",
           telefone_comercial: "",
           rg: "",
           ie: "",
@@ -203,20 +203,6 @@ const CadastroClientes = () => {
           id="telefone_celular"
           name="telefone_celular"
           value={formData.telefone_celular}
-          minLength={10}
-          maxLength={15}
-          placeholder="(xx) xxxxx-xxxx"
-          onChange={handleChange}
-        />
-      </div>
-
-      <div className="flex flex-col">
-        <label htmlFor="telefone_residencial">Telefone Residencial:</label>
-        <input
-          className="border p-2 rounded-md"
-          id="telefone_residencial"
-          name="telefone_residencial"
-          value={formData.telefone_residencial}
           minLength={10}
           maxLength={15}
           placeholder="(xx) xxxxx-xxxx"
