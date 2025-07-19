@@ -43,14 +43,17 @@ const Home = () => {
   return (
     <section className="grid gap-4 p-4 grid-cols-1 md:grid-cols-3 ">
       <CardInfo
+        rota="veiculos"
         titulo="Veículos Cadastrados"
         quantidade={quantidades.veiculos || 0}
       />
       <CardInfo
+        rota="clientes"
         titulo="Clientes Cadastrados"
         quantidade={quantidades.clientes || 0}
       />
       <CardInfo
+        rota="vendas"
         titulo="Vendas Realizadas"
         quantidade={quantidades.vendas || 0}
       />

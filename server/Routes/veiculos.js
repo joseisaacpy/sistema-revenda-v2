@@ -9,33 +9,35 @@ const router = express.Router();
 router.post("/", async (req, res) => {
   const {
     chassi,
+    renavan,
     placa,
     marca,
     modelo,
     ano_modelo,
-    cor,
     combustivel,
+    cor,
     km,
     valor_compra,
-    valor_venda_sugerido,
-    status_estoque,
     data_compra,
+    fornecedor,
+    cpf_cnpj_fornecedor,
   } = req.body;
 
   // Validação simples
   if (
     !chassi ||
+    !renavan ||
     !placa ||
     !marca ||
     !modelo ||
     !ano_modelo ||
-    !cor ||
     !combustivel ||
+    !cor ||
     !km ||
     !valor_compra ||
-    !valor_venda_sugerido ||
-    !status_estoque ||
-    !data_compra
+    !data_compra ||
+    !fornecedor ||
+    !cpf_cnpj_fornecedor
   ) {
     return res.status(400).json({
       error: "Todos os campos são obrigatórios.",
@@ -45,21 +47,22 @@ router.post("/", async (req, res) => {
   try {
     await db.query(
       `INSERT INTO veiculos_estoque 
-      (chassi, placa, marca, modelo, ano_modelo, cor, combustivel, km, valor_compra, valor_venda_sugerido, status_estoque, data_compra) 
-      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)`,
+      (chassi,renavan, placa, marca, modelo, ano_modelo, combustivel, cor, km, valor_compra, data_compra, fornecedor, cpf_cnpj_fornecedor) 
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)`,
       [
         chassi,
+        renavan,
         placa,
         marca,
         modelo,
         ano_modelo,
-        cor,
         combustivel,
+        cor,
         km,
         valor_compra,
-        valor_venda_sugerido,
-        status_estoque,
         data_compra,
+        fornecedor,
+        cpf_cnpj_fornecedor,
       ]
     );
     res.status(201).json({ message: "Veículo cadastrado com sucesso." });
@@ -87,7 +90,10 @@ router.get("/", async (req, res) => {
 router.get("/:id", async (req, res) => {
   const { id } = req.params;
   try {
-    const result = await db.query("SELECT * FROM veiculos_estoque WHERE id = $1", [id]);
+    const result = await db.query(
+      "SELECT * FROM veiculos_estoque WHERE id = $1",
+      [id]
+    );
     if (result.rows.length === 0) {
       return res.status(404).json({ error: "Veículo não encontrado." });
     }
@@ -103,37 +109,39 @@ router.put("/:id", async (req, res) => {
   const { id } = req.params;
   const {
     chassi,
+    renavan,
     placa,
     marca,
     modelo,
     ano_modelo,
-    cor,
     combustivel,
+    cor,
     km,
     valor_compra,
-    valor_venda_sugerido,
-    status_estoque,
     data_compra,
+    fornecedor,
+    cpf_cnpj_fornecedor,
   } = req.body;
 
   try {
     const result = await db.query(
       `UPDATE veiculos_estoque 
-      SET chassi = $1, placa = $2, marca = $3, modelo = $4, ano_modelo = $5, cor = $6, combustivel = $7, km = $8, valor_compra = $9, valor_venda_sugerido = $10, status_estoque = $11, data_compra = $12
-      WHERE id = $13`,
+      SET chassi = $1, renavan = $2, placa = $3, marca = $4, modelo = $5, ano_modelo = $6, combustivel = $7, cor = $8, km = $9, valor_compra = $10, data_compra = $11, fornecedor = $12, cpf_cnpj_fornecedor = $13
+      WHERE id = $14`,
       [
         chassi,
+        renavan,
         placa,
         marca,
         modelo,
         ano_modelo,
-        cor,
         combustivel,
+        cor,
         km,
         valor_compra,
-        valor_venda_sugerido,
-        status_estoque,
         data_compra,
+        fornecedor,
+        cpf_cnpj_fornecedor,
         id,
       ]
     );
@@ -154,9 +162,10 @@ router.delete("/:id", async (req, res) => {
   const { id } = req.params;
 
   try {
-    const result = await db.query("DELETE FROM carros WHERE id_carro = $1", [
-      id,
-    ]);
+    const result = await db.query(
+      "DELETE FROM veiculos_estoque WHERE id = $1",
+      [id]
+    );
 
     if (result.rowCount === 0) {
       return res.status(404).json({ error: "Veículo não encontrado." });

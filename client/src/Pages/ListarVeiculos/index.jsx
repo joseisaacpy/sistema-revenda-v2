@@ -86,7 +86,6 @@ const ListarVeiculos = () => {
               <th className="text-left p-2 border">Cor</th>
               <th className="text-left p-2 border">Km</th>
               <th className="text-left p-2 border">Valor</th>
-              <th className="text-left p-2 border">Tipo</th>
               <th className="text-left p-2 border">Ações</th>
             </tr>
           </thead>
@@ -99,7 +98,6 @@ const ListarVeiculos = () => {
                 <td className="p-2 border">{veiculo.cor}</td>
                 <td className="p-2 border">{veiculo.km}</td>
                 <td className="p-2 border">{veiculo.valor_compra}</td>
-                <td className="p-2 border">{veiculo.tipo}</td>
                 <td className="p-2 border">
                   {/* Chamar a tela de edição */}
                   <button className="mr-2 cursor-pointer">
