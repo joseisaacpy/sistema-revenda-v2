@@ -73,16 +73,55 @@ router.post("/", async (req, res) => {
 });
 
 // READ (todos)
+// router.get("/", async (req, res) => {
+//   try {
+//     const result = await db.query("SELECT * FROM veiculos");
+//     if (result.rows.length === 0) {
+//       return res.status(404).json({ error: "Nenhum veículo encontrado." });
+//     }
+//     res.json(result.rows);
+//   } catch (error) {
+//     console.error("Erro ao buscar veículos:", error);
+//     res.status(500).json({ error: "Erro ao buscar veículos." });
+//   }
+// });
+
+// READ (por status)
 router.get("/", async (req, res) => {
   try {
-    const result = await db.query("SELECT * FROM veiculos");
-    if (result.rows.length === 0) {
-      return res.status(404).json({ error: "Nenhum veículo encontrado." });
+    const status = req.query.status?.trim().toLowerCase(); // Pega o status do query parameter
+    let queryText = "SELECT * FROM veiculos"; // Consulta base
+    const queryParams = []; // Array para parâmetros da consulta
+
+    // Se um status válido for fornecido, adiciona a cláusula WHERE
+    if (status === "estoque" || status === "vendido") {
+      queryText += " WHERE status = $1";
+      queryParams.push(status);
+    } else if (status) {
+      // Se um status foi fornecido, mas é inválido
+      return res
+        .status(400)
+        .json({ error: "Status inválido. Use 'estoque' ou 'vendido'." });
     }
-    res.json(result.rows);
+
+    const result = await db.query(queryText, queryParams);
+
+    if (result.rows.length === 0 && queryParams.length > 0) {
+      // Se filtrou e não encontrou nada
+      return res
+        .status(404)
+        .json({ error: `Nenhum veículo encontrado com status '${status}'.` });
+    } else if (result.rows.length === 0) {
+      // Se não filtrou e não tem veículos no total
+      return res.status(404).json({ error: "Nenhum veículo cadastrado." });
+    }
+
+    return res.json(result.rows);
   } catch (error) {
     console.error("Erro ao buscar veículos:", error);
-    res.status(500).json({ error: "Erro ao buscar veículos." });
+    res
+      .status(500)
+      .json({ error: "Erro interno do servidor ao buscar veículos." });
   }
 });
 
