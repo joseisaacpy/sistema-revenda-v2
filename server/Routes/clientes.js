@@ -45,7 +45,7 @@ router.post("/", async (req, res) => {
     const parseNumber = (value) => Number(value) || 0;
 
     await db.query(
-      `INSERT INTO clientes_nova
+      `INSERT INTO clientes
       (cpf_cnpj,pessoa,sexo,nome,telefone_celular,telefone_comercial,rg,ie,data_nascimento,data_cadastro,email,cep,rua,numero,bairro,estado,cidade,complemento,cargo,nome_mae,nome_pai,data_ultima_compra,quantidade_veic_comprados)
       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21,$22,$23)`,
 
@@ -85,7 +85,7 @@ router.post("/", async (req, res) => {
 // Read todos
 router.get("/", async (req, res) => {
   try {
-    const clientes = await db.query("SELECT * FROM clientes_nova");
+    const clientes = await db.query("SELECT * FROM clientes");
     res.json(clientes.rows);
   } catch (error) {
     console.error("Erro ao buscar os clientes", error);
@@ -97,7 +97,7 @@ router.get("/", async (req, res) => {
 router.get("/:id", async (req, res) => {
   try {
     const { id } = req.params;
-    const cliente = await db.query("SELECT * FROM clientes_nova WHERE id=$1", [
+    const cliente = await db.query("SELECT * FROM clientes WHERE id=$1", [
       id,
     ]);
     // Validação de cliente
@@ -131,7 +131,7 @@ router.put("/:id", async (req, res) => {
     } = req.body;
 
     const result = await db.query(
-      `UPDATE clientes_nova 
+      `UPDATE clientes 
        SET nome=$1, cpf_cnpj=$2, dataNascimento=$3, email=$4, telefone_celular=$5,
            cep=$6, rua=$7, numero=$8, bairro=$9, cidade=$10, estado=$11
        WHERE id=$12`,
@@ -166,7 +166,7 @@ router.put("/:id", async (req, res) => {
 router.delete("/:id", async (req, res) => {
   try {
     const { id } = req.params;
-    const result = await db.query("DELETE FROM clientes_nova WHERE id = $1", [
+    const result = await db.query("DELETE FROM clientes WHERE id = $1", [
       id,
     ]);
     res.json({ message: "Cliente deletado com sucesso." });
