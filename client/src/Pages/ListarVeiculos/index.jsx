@@ -132,7 +132,7 @@ const ListarVeiculos = () => {
         pauseOnFocusLoss
         draggable
         pauseOnHover
-        theme="light"
+        theme="colored"
       />
     </section>
   );
