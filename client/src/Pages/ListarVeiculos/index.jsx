@@ -97,7 +97,13 @@ const ListarVeiculos = () => {
                 <td className="p-2 border">{veiculo.ano_modelo}</td>
                 <td className="p-2 border">{veiculo.cor}</td>
                 <td className="p-2 border">{veiculo.km}</td>
-                <td className="p-2 border">{veiculo.valor_compra}</td>
+                {/* Valor compra em formato monetário R$ */}
+                <td className="p-2 border">
+                  {new Intl.NumberFormat("pt-BR", {
+                    style: "currency",
+                    currency: "BRL",
+                  }).format(veiculo.valor_compra)}
+                </td>
                 <td className="p-2 border">
                   {/* Chamar a tela de edição */}
                   <button className="mr-2 cursor-pointer">
