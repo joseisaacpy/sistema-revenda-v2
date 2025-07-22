@@ -16,7 +16,7 @@ const CadastroClientes = () => {
     rg: "",
     ie: "",
     data_nascimento: "",
-    data_cadastro: "",
+    data_cadastro: new Date().toISOString().slice(0, 10),
     email: "",
     cep: "",
     rua: "",
@@ -99,7 +99,7 @@ const CadastroClientes = () => {
           rg: "",
           ie: "",
           data_nascimento: "",
-          data_cadastro: "",
+          data_cadastro: new Date().toISOString().slice(0, 10), // Reinicia com a data atual
           email: "",
           cep: "",
           rua: "",

@@ -128,16 +128,46 @@ router.post("/", async (req, res) => {
   }
 });
 
-// READ
+// READ - Obter todas as vendas com detalhes de cliente e veículo
 router.get("/", async (req, res) => {
   try {
-    const vendas = await db.query("SELECT * FROM vendas");
-    if (vendas.rows.length === 0) {
+    const query = `
+      SELECT
+          v.id,
+          v.data_venda,
+          v.valor_venda,
+          v.forma_pagamento,
+          v.observacoes,
+          c.nome AS cliente_nome,
+          c.cpf_cnpj AS cliente_cpf_cnpj,
+          ve.marca AS veiculo_marca,
+          ve.modelo AS veiculo_modelo,
+          ve.placa AS veiculo_placa,
+          ve.ano_modelo AS veiculo_ano_modelo,
+          ve.cor AS veiculo_cor
+      FROM
+          vendas v
+      JOIN
+          clientes c ON v.id_cliente = c.id
+      JOIN
+          veiculos ve ON v.id_veiculo = ve.id
+      ORDER BY
+          v.data_venda DESC, v.id DESC; -- Ordena pela data mais recente e depois pelo ID para consistência
+    `;
+
+    const result = await db.query(query);
+
+    if (result.rows.length === 0) {
       return res.status(404).json({ error: "Nenhuma venda encontrada." });
     }
-    res.json(vendas.rows);
+
+    res.json(result.rows);
   } catch (error) {
-    console.error("Erro ao buscar as vendas", error);
+    console.error("Erro ao buscar as vendas:", error); // Adicionei o ":" para consistência
+    // Retorna um erro 500 para o cliente em caso de falha interna
+    res
+      .status(500)
+      .json({ error: "Erro interno do servidor ao buscar as vendas." });
   }
 });
 
