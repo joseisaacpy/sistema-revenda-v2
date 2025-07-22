@@ -93,56 +93,39 @@ const ListarVendas = () => {
         <table className="min-w-full border border-gray-300">
           <thead className="bg-gray-100">
             <tr>
-              <th className="text-left p-3 border border-gray-300">
-                Data da Venda
-              </th>
-              <th className="text-left p-3 border border-gray-300">Cliente</th>{" "}
+              <th className="text-left p-2 border">Data da Venda</th>
+              <th className="text-left p-2 border">Cliente</th>{" "}
               {/* Novo campo */}
-              <th className="text-left p-3 border border-gray-300">
-                Veículo
-              </th>{" "}
+              <th className="text-left p-2 border">Veículo</th>{" "}
               {/* Novo campo */}
-              <th className="text-left p-3 border border-gray-300">
-                Valor da Venda
-              </th>
-              <th className="text-left p-3 border border-gray-300">
-                Forma de Pagamento
-              </th>
-              <th className="text-left p-3 border border-gray-300">
-                Observação
-              </th>
+              <th className="text-left p-2 border">Valor da Venda</th>
+              <th className="text-left p-2 border">Forma de Pagamento</th>
+              <th className="text-left p-2 border">Observação</th>
             </tr>
           </thead>
           <tbody>
             {vendas.map((venda) => (
-              <tr
-                key={venda.id}
-                className="even:bg-gray-50 odd:bg-white hover:bg-gray-100"
-              >
-                <td className="p-3 border border-gray-300">
+              <tr key={venda.id} className="even:bg-gray-100 odd:bg-gray-300">
+                <td className="p-2 border">
                   {new Date(venda.data_venda).toLocaleDateString("pt-BR")}
                 </td>
                 {/* Dados do cliente e veículo: dependem do JOIN no backend */}
-                <td className="p-3 border border-gray-300">
+                <td className="p-2 border">
                   {venda.cliente_nome || "N/A"} -{" "}
                   {venda.cliente_cpf_cnpj || "N/A"}
                 </td>
-                <td className="p-3 border border-gray-300">
+                <td className="p-2 border">
                   {venda.veiculo_marca || "N/A"} {venda.veiculo_modelo || "N/A"}{" "}
                   ({venda.veiculo_placa || "N/A"})
                 </td>
-                <td className="p-3 border border-gray-300">
+                <td className="p-2 border">
                   {new Intl.NumberFormat("pt-BR", {
                     style: "currency",
                     currency: "BRL",
                   }).format(venda.valor_venda)}
                 </td>
-                <td className="p-3 border border-gray-300">
-                  {venda.forma_pagamento}
-                </td>
-                <td className="p-3 border border-gray-300">
-                  {venda.observacoes || "N/A"}
-                </td>
+                <td className="p-2 border">{venda.forma_pagamento}</td>
+                <td className="p-2 border">{venda.observacoes || "N/A"}</td>
               </tr>
             ))}
           </tbody>

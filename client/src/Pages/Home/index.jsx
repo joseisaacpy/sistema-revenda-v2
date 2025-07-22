@@ -4,6 +4,16 @@ import { useState, useEffect } from "react";
 import CardInfo from "../../Components/CardInfo";
 import fetchQuantidade from "../../api/fetchQuantidade.js";
 import Loader from "../../Components/Loader/index.jsx";
+// Ícones
+import {
+  FaHome,
+  FaUserPlus,
+  FaCarSide,
+  FaTruckPickup,
+  FaUsers,
+  FaChartLine,
+  FaReceipt,
+} from "react-icons/fa";
 
 const Home = () => {
   // Estados
@@ -19,19 +29,11 @@ const Home = () => {
       try {
         const clientes = await fetchQuantidade("/api/clientes");
         const veiculos = await fetchQuantidade("/api/veiculos");
-        const veiculosVendidos = await fetchQuantidade(
-          "/api/veiculos?status=vendido"
-        );
-        const veiculosEstoque = await fetchQuantidade(
-          "/api/veiculos?status=estoque"
-        );
         const vendas = await fetchQuantidade("/api/vendas");
         // Atualiza os estados
         setQuantidades({
           clientes,
           veiculos,
-          veiculosVendidos,
-          veiculosEstoque,
           vendas,
         });
       } catch (error) {
@@ -55,30 +57,21 @@ const Home = () => {
         rota="veiculos"
         titulo="Veículos Cadastrados"
         quantidade={quantidades.veiculos || 0}
-      />
-      {/* Veículos Vendidos */}
-      <CardInfo
-        rota="veiculos"
-        titulo="Veículos Vendidos"
-        quantidade={quantidades.veiculosVendidos || 0}
-      />
-      {/* Veículos no Estoque */}
-      <CardInfo
-        rota="veiculos"
-        titulo="Veículos no Estoque"
-        quantidade={quantidades.veiculosEstoque || 0}
+        icon={<FaCarSide className="text-4xl" />}
       />
       {/* Clientes Cadastrados */}
       <CardInfo
         rota="clientes"
         titulo="Clientes Cadastrados"
         quantidade={quantidades.clientes || 0}
+        icon={<FaUserPlus className="text-4xl" />}
       />
       {/* Qtde de Vendas Realizadas */}
       <CardInfo
         rota="vendas"
         titulo="Vendas Realizadas"
         quantidade={quantidades.vendas || 0}
+        icon={<FaChartLine className="text-4xl" />}
       />
     </section>
   );

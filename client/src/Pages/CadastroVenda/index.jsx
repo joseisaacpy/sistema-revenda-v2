@@ -296,6 +296,7 @@ const CadastroVenda = () => {
           <option value="Cartão de Débito">Cartão de Débito</option>
           <option value="Financiamento">Financiamento</option>
           <option value="Troca">Troca</option>
+          <option value="PIX">PIX</option>
         </select>
       </div>
 

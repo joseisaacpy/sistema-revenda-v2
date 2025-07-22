@@ -75,7 +75,7 @@ const ListarClientes = () => {
         Lista de Clientes Cadastrados
       </h1>
       <p className="mb-4">
-        Quantidade de Clientes:{" "}
+        Quantidade de Clientes:
         <span className="font-bold">{clientes.length}</span>
       </p>
       <div className="overflow-x-auto">

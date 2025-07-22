@@ -20,7 +20,7 @@ const app = express();
 // Limitador: limite de 100 requisições por 15 minutos por IP
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutos
-  max: 100, // Limite de 100 requisições por IP
+  max: 1000, // Limite de 100 requisições por IP
   message: "Muitas requisições feitas por este IP. Tente novamente mais tarde.",
   standardHeaders: true, // Retorna informações no cabeçalho RateLimit
   legacyHeaders: false, // Desativa o cabeçalho `X-RateLimit-*`

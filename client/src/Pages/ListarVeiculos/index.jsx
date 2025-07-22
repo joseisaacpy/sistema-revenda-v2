@@ -80,7 +80,7 @@ const ListarVeiculos = () => {
         <table className="min-w-full border border-gray-300">
           <thead className="bg-gray-100">
             <tr>
-              <th className="text-left p-2 border sticky left-0 z-10">Placa</th>
+              <th className="text-left p-2 border">Placa</th>
               <th className="text-left p-2 border">Modelo</th>
               <th className="text-left p-2 border">Ano</th>
               <th className="text-left p-2 border">Cor</th>

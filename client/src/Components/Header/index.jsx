@@ -11,6 +11,8 @@ import {
   FaCarSide,
   FaTruckPickup,
   FaUsers,
+  FaChartLine,
+  FaReceipt,
 } from "react-icons/fa";
 
 // Icone para menu burguer
@@ -147,10 +149,10 @@ const Header = () => {
           <li>
             <Link
               className="flex items-center gap-1 transition-transform duration-300 hover:scale-105 hover:text-yellow-400"
-              to="/veiculos"
+              to="/cadastro-venda"
             >
-              <FaTruckPickup />
-              Veículos
+              <FaReceipt />
+              Venda
             </Link>
           </li>
           <li>
@@ -160,6 +162,24 @@ const Header = () => {
             >
               <FaUsers />
               Clientes
+            </Link>
+          </li>
+          <li>
+            <Link
+              className="flex items-center gap-1 transition-transform duration-300 hover:scale-105 hover:text-yellow-400"
+              to="/veiculos"
+            >
+              <FaTruckPickup />
+              Veículos
+            </Link>
+          </li>
+          <li>
+            <Link
+              className="flex items-center gap-1 transition-transform duration-300 hover:scale-105 hover:text-yellow-400"
+              to="/vendas"
+            >
+              <FaChartLine />
+              Vendas
             </Link>
           </li>
         </ul>
