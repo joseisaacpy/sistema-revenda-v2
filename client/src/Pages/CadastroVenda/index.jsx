@@ -117,8 +117,7 @@ const CadastroVenda = () => {
 
     setLoading(true); // Ativa o loading para o envio
     try {
-      const url = import.meta.env.VITE_API_URL || "http://localhost:3001";
-
+      const url = `${import.meta.env.VITE_API_URL}`;
       const payload = {
         id_cliente: parseInt(formData.id_cliente),
         id_veiculo: parseInt(formData.id_veiculo),
@@ -155,6 +154,7 @@ const CadastroVenda = () => {
           errorData.error || "Erro desconhecido ao cadastrar venda.";
         toast.error(`Erro: ${errorMessage}`);
         console.error("Erro no backend:", errorData);
+        console.log(url);
       }
     } catch (error) {
       console.error("Erro ao enviar venda:", error);

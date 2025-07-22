@@ -3,9 +3,10 @@ import express from "express";
 import rateLimit from "express-rate-limit";
 import cors from "cors";
 import dotenv from "dotenv";
-// Rotas
+// Imports das Rotas
 import clientesRoutes from "./Routes/clientes.js";
 import veiculosRoutes from "./Routes/veiculos.js";
+import vendasRoutes from "./Routes/vendas.js";
 // import { fileURLToPath } from "url";
 // import { dirname } from "path";
 
@@ -15,6 +16,7 @@ dotenv.config();
 // Constantes
 const port = process.env.PORT || 8080;
 const app = express();
+
 // Limitador: limite de 100 requisições por 15 minutos por IP
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutos
@@ -37,6 +39,7 @@ app.use(limiter); // Aplica em todas as rotas o limitador
 // Rotas
 app.use("/api/clientes", clientesRoutes);
 app.use("/api/veiculos", veiculosRoutes);
+app.use("/api/vendas", vendasRoutes);
 
 // Inicia o servidor
 app.listen(port, "0.0.0.0", () => {

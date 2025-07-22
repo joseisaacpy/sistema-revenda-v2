@@ -15,8 +15,6 @@ const CadastroVeiculos = () => {
     combustivel: "",
     km: "",
     valor_compra: "",
-    valor_venda_sugerido: "",
-    status_estoque: "",
     data_compra: "",
   });
 
@@ -39,7 +37,6 @@ const CadastroVeiculos = () => {
       ano_modelo: parseInt(formData.ano_modelo),
       km: parseInt(formData.km),
       valor_compra: parseFloat(formData.valor_compra),
-      valor_venda_sugerido: parseFloat(formData.valor_venda_sugerido),
     };
 
     // Fazendo o envio dos dados
@@ -68,8 +65,6 @@ const CadastroVeiculos = () => {
           combustivel: "",
           km: "",
           valor_compra: "",
-          valor_venda_sugerido: "",
-          status_estoque: "",
           data_compra: "",
         });
       } else {
@@ -225,35 +220,6 @@ const CadastroVeiculos = () => {
           placeholder="Digite o valor de compra"
           type="number"
         />
-      </div>
-
-      <div className="flex flex-col">
-        <label htmlFor="valor_venda_sugerido">Valor Venda Sugerido:</label>
-        <input
-          className="border p-2 rounded-md"
-          id="valor_venda_sugerido"
-          name="valor_venda_sugerido"
-          value={formData.valor_venda_sugerido}
-          onChange={handleChange}
-          placeholder="Digite o valor sugerido para venda"
-          type="number"
-        />
-      </div>
-
-      <div className="flex flex-col">
-        <label htmlFor="status_estoque">Status Estoque:</label>
-        <select
-          className="border p-2 rounded-md"
-          id="status_estoque"
-          name="status_estoque"
-          value={formData.status_estoque}
-          onChange={handleChange}
-        >
-          <option value="">Selecione o status</option>
-          <option value="Disponível">Disponível</option>
-          <option value="Vendido">Vendido</option>
-          <option value="Reservado">Reservado</option>
-        </select>
       </div>
 
       <div className="flex flex-col">
