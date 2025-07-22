@@ -19,11 +19,19 @@ const Home = () => {
       try {
         const clientes = await fetchQuantidade("/api/clientes");
         const veiculos = await fetchQuantidade("/api/veiculos");
+        const veiculosVendidos = await fetchQuantidade(
+          "/api/veiculos?status=vendido"
+        );
+        const veiculosEstoque = await fetchQuantidade(
+          "/api/veiculos?status=estoque"
+        );
         const vendas = await fetchQuantidade("/api/vendas");
         // Atualiza os estados
         setQuantidades({
           clientes,
           veiculos,
+          veiculosVendidos,
+          veiculosEstoque,
           vendas,
         });
       } catch (error) {
@@ -42,16 +50,31 @@ const Home = () => {
 
   return (
     <section className="grid gap-4 p-4 grid-cols-1 md:grid-cols-3 ">
+      {/* Veículos Cadastrado */}
       <CardInfo
         rota="veiculos"
         titulo="Veículos Cadastrados"
         quantidade={quantidades.veiculos || 0}
       />
+      {/* Veículos Vendidos */}
+      <CardInfo
+        rota="veiculos"
+        titulo="Veículos Vendidos"
+        quantidade={quantidades.veiculosVendidos || 0}
+      />
+      {/* Veículos no Estoque */}
+      <CardInfo
+        rota="veiculos"
+        titulo="Veículos no Estoque"
+        quantidade={quantidades.veiculosEstoque || 0}
+      />
+      {/* Clientes Cadastrados */}
       <CardInfo
         rota="clientes"
         titulo="Clientes Cadastrados"
         quantidade={quantidades.clientes || 0}
       />
+      {/* Qtde de Vendas Realizadas */}
       <CardInfo
         rota="vendas"
         titulo="Vendas Realizadas"
