@@ -45,7 +45,7 @@ const Header = () => {
         >
           <FaTruckPickup className="text-4xl" />
           <h1 className="hidden md:block text-2xl font-bold">
-            Só Caminhonetes
+            Só Camionetes
           </h1>
         </Link>
 
@@ -92,6 +92,14 @@ const Header = () => {
             </Link>
             <Link
               onClick={() => setIsMenuOpen(false)}
+              to="/cadastro-venda"
+              className="text-xl"
+            >
+              <FaReceipt className="inline mr-2" />
+              Venda
+            </Link>
+            <Link
+              onClick={() => setIsMenuOpen(false)}
               to="/cadastro-veiculo"
               className="text-xl"
             >
@@ -113,6 +121,14 @@ const Header = () => {
             >
               <FaUsers className="inline mr-2" />
               Clientes
+            </Link>
+            <Link
+              onClick={() => setIsMenuOpen(false)}
+              to="/vendas"
+              className="text-xl"
+            >
+              <FaChartLine className="inline mr-2" />
+              Vendas
             </Link>
           </div>
         )}

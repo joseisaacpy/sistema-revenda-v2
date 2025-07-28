@@ -82,7 +82,7 @@ const ListarClientes = () => {
         <table className="min-w-full border border-gray-300">
           <thead className="bg-gray-100">
             <tr>
-              <th className="text-left p-2 border sticky left-0 z-10">Nome</th>
+              <th className="text-left p-2 border">Nome</th>
               <th className="text-left p-2 border">CPF/CNPJ</th>
               <th className="text-left p-2 border">Telefone</th>
               <th className="text-left p-2 border">Data de Nascimento</th>
@@ -96,9 +96,7 @@ const ListarClientes = () => {
                 key={cliente.nome}
                 className="even:bg-gray-100 odd:bg-gray-300"
               >
-                <td className="p-2 border sticky left-0 z-10">
-                  {cliente.nome}
-                </td>
+                <td className="p-2 border">{cliente.nome}</td>
                 <td className="p-2 border">{cliente.cpf_cnpj}</td>
                 <td className="p-2 border">{cliente.telefone_celular}</td>
                 <td className="p-2 border">{cliente.data_nascimento}</td>
