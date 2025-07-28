@@ -1,5 +1,5 @@
 // Importa icones
-import { FaEdit, FaTrash } from "react-icons/fa";
+import { FaEdit, FaTimes, FaTrash } from "react-icons/fa";
 // Importa as bibliotecas
 import { useState, useEffect } from "react";
 // Loader
@@ -70,71 +70,76 @@ const ListarVeiculos = () => {
   }
 
   return (
-    <section className="p-4">
-      <h1 className="text-2xl font-semibold mb-4">Lista de Veículos</h1>
-      <p className="mb-4">
-        Quantidade de Veículos:{" "}
-        <span className="font-bold">{veiculos.length}</span>
-      </p>
-      <div className="overflow-x-auto">
-        <table className="min-w-full border border-gray-300">
-          <thead className="bg-gray-100">
-            <tr>
-              <th className="text-left p-2 border">Placa</th>
-              <th className="text-left p-2 border">Modelo</th>
-              <th className="text-left p-2 border">Ano</th>
-              <th className="text-left p-2 border">Cor</th>
-              <th className="text-left p-2 border">Km</th>
-              <th className="text-left p-2 border">Valor</th>
-              <th className="text-left p-2 border">Ações</th>
-            </tr>
-          </thead>
-          <tbody>
-            {veiculos.map((veiculo) => (
-              <tr key={veiculo.id} className="even:bg-gray-100 odd:bg-gray-300">
-                <td className="p-2 border">{veiculo.placa}</td>
-                <td className="p-2 border">{veiculo.modelo}</td>
-                <td className="p-2 border">{veiculo.ano_modelo}</td>
-                <td className="p-2 border">{veiculo.cor}</td>
-                <td className="p-2 border">{veiculo.km}</td>
-                {/* Valor compra em formato monetário R$ */}
-                <td className="p-2 border">
-                  {new Intl.NumberFormat("pt-BR", {
-                    style: "currency",
-                    currency: "BRL",
-                  }).format(veiculo.valor_compra)}
-                </td>
-                <td className="p-2 border">
-                  {/* Chamar a tela de edição */}
-                  <button className="mr-2 cursor-pointer">
-                    <FaEdit className="text-blue-700" />
-                  </button>
-                  <button
-                    className="cursor-pointer"
-                    onClick={() => deletarVeiculo(veiculo.id)}
-                  >
-                    {/* Chamar função de exclusão */}
-                    <FaTrash className="text-red-700" />
-                  </button>
-                </td>
+    <>
+      <section className="p-4">
+        <h1 className="text-2xl font-semibold mb-4">Lista de Veículos</h1>
+        <p className="mb-4">
+          Quantidade de Veículos:{" "}
+          <span className="font-bold">{veiculos.length}</span>
+        </p>
+        <div className="overflow-x-auto">
+          <table className="min-w-full border border-gray-300">
+            <thead className="bg-gray-100">
+              <tr>
+                <th className="text-left p-2 border">Placa</th>
+                <th className="text-left p-2 border">Modelo</th>
+                <th className="text-left p-2 border">Ano</th>
+                <th className="text-left p-2 border">Cor</th>
+                <th className="text-left p-2 border">Km</th>
+                <th className="text-left p-2 border">Valor</th>
+                <th className="text-left p-2 border">Ações</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-      <ToastContainer
-        position="top-right"
-        autoClose={3000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="colored"
-      />
-    </section>
+            </thead>
+            <tbody>
+              {veiculos.map((veiculo) => (
+                <tr
+                  key={veiculo.id}
+                  className="even:bg-gray-100 odd:bg-gray-300"
+                >
+                  <td className="p-2 border">{veiculo.placa}</td>
+                  <td className="p-2 border">{veiculo.modelo}</td>
+                  <td className="p-2 border">{veiculo.ano_modelo}</td>
+                  <td className="p-2 border">{veiculo.cor}</td>
+                  <td className="p-2 border">{veiculo.km}</td>
+                  {/* Valor compra em formato monetário R$ */}
+                  <td className="p-2 border">
+                    {new Intl.NumberFormat("pt-BR", {
+                      style: "currency",
+                      currency: "BRL",
+                    }).format(veiculo.valor_compra)}
+                  </td>
+                  <td className="p-2 border">
+                    {/* Chamar a tela de edição */}
+                    <button className="mr-2 cursor-pointer">
+                      <FaEdit className="text-blue-700" />
+                    </button>
+                    <button
+                      className="cursor-pointer"
+                      onClick={() => deletarVeiculo(veiculo.id)}
+                    >
+                      {/* Chamar função de exclusão */}
+                      <FaTrash className="text-red-700" />
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <ToastContainer
+          position="top-right"
+          autoClose={3000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="colored"
+        />
+      </section>
+    </>
   );
 };
 
