@@ -1,14 +1,29 @@
 import imgCars from "../../Assets/Images/cars.webp";
 import { Link } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 const Register = () => {
+  // Estados pra lidar com o preenchimento do formulário
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    password: "",
+  });
 
-  // para mudar o titulo da aba
+  // Função para lidar com o preenchimento do formulário
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
+
+  // Para mudar o titulo da aba
   useEffect(() => {
     document.title = "Cadastro | Só Camionetes";
   }, []);
-  
+
   return (
     // Container
     <section className="min-h-screen flex flex-col md:flex-row items-stretch justify-center p-5 md:p-15 bg-slate-500">
@@ -27,6 +42,8 @@ const Register = () => {
               id="nome"
               className="border p-2 rounded-[5px]"
               placeholder="Digite seu nome completo"
+              value={formData.name}
+              onChange={handleChange}
             />
           </div>
           <div className="flex flex-col">
@@ -39,6 +56,8 @@ const Register = () => {
               autoComplete="email"
               className="border p-2 rounded-[5px]"
               placeholder="Digite seu email"
+              value={formData.email}
+              onChange={handleChange}
             />
           </div>
           <div className="flex flex-col">
@@ -51,6 +70,8 @@ const Register = () => {
               autoComplete="current-password"
               className="border p-2 rounded-[5px]"
               placeholder="Digite uma senha"
+              value={formData.password}
+              onChange={handleChange}
             />
           </div>
           <span className="text-sm text-center">

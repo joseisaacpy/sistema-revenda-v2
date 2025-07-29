@@ -1,13 +1,25 @@
 import imgCars from "../../Assets/Images/cars.webp";
 import { Link } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 const Login = () => {
-    // para mudar o titulo da aba
-    useEffect(() => {
-      document.title = "Login | Só Camionetes";
-    }, []);
-  
+  // Estados pra lidar com o preenchimento do formulário
+  const [formData, setFormData] = useState({ email: "", password: "" });
+
+  // Função para lidar com o preenchimento do formulário
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
+
+  // Para mudar o titulo da aba
+  useEffect(() => {
+    document.title = "Login | Só Camionetes";
+  }, []);
+
   return (
     // Container
     <section className="min-h-screen flex flex-col md:flex-row items-stretch justify-center p-5 md:p-15 bg-slate-500">
@@ -25,6 +37,8 @@ const Login = () => {
               autoComplete="email"
               className="border p-2 rounded-[5px]"
               placeholder="Digite seu email"
+              value={formData.email}
+              onChange={handleChange}
             />
           </div>
           <div className="flex flex-col">
@@ -36,6 +50,8 @@ const Login = () => {
               autoComplete="current-password"
               className="border p-2 rounded-[5px]"
               placeholder="Digite sua senha"
+              value={formData.password}
+              onChange={handleChange}
             />
           </div>
           <span className="text-sm text-center">
