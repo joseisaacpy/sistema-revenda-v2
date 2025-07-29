@@ -1,6 +1,7 @@
 // IMPORTS
 import express from "express";
 import db from "../Database/connection.js";
+import { verificarToker } from "../middlewares/authMiddleware.js";
 
 // CONSTANTES
 const router = express.Router();
@@ -83,7 +84,7 @@ router.post("/", async (req, res) => {
 });
 
 // Read todos
-router.get("/", async (req, res) => {
+router.get("/", verificarToker, async (req, res) => {
   try {
     const clientes = await db.query("SELECT * FROM clientes");
     res.json(clientes.rows);
@@ -97,9 +98,7 @@ router.get("/", async (req, res) => {
 router.get("/:id", async (req, res) => {
   try {
     const { id } = req.params;
-    const cliente = await db.query("SELECT * FROM clientes WHERE id=$1", [
-      id,
-    ]);
+    const cliente = await db.query("SELECT * FROM clientes WHERE id=$1", [id]);
     // Validação de cliente
     if (cliente.rows.length === 0) {
       return res.status(404).json({ error: "Cliente nao encontrado." });
@@ -166,9 +165,7 @@ router.put("/:id", async (req, res) => {
 router.delete("/:id", async (req, res) => {
   try {
     const { id } = req.params;
-    const result = await db.query("DELETE FROM clientes WHERE id = $1", [
-      id,
-    ]);
+    const result = await db.query("DELETE FROM clientes WHERE id = $1", [id]);
     res.json({ message: "Cliente deletado com sucesso." });
     // Valida se o cliente foi deletado
     if (result.rowCount === 0) {

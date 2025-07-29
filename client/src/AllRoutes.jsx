@@ -1,34 +1,101 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Login from "./Pages/Login";
 import Register from "./Pages/Register";
+import PrivateRoutes from "./PrivateRoutes";
+import MainLayout from "./Components/MainLayout"; // Layout padrão com header e footer
 import Home from "./Pages/Home";
-import NotFound from "./Pages/NotFound";
 import CadastroVeiculo from "./Pages/CadastroVeiculo";
 import CadastroCliente from "./Pages/CadastroCliente";
 import CadastroVenda from "./Pages/CadastroVenda";
 import ListarVeiculos from "./Pages/ListarVeiculos";
 import ListarClientes from "./Pages/ListarClientes";
 import ListarVendas from "./Pages/ListarVendas";
-import MainLayout from "./Components/MainLayout"; // novo layout com o Header
+import NotFound from "./Pages/NotFound";
 
 const AllRoutes = () => {
   return (
     <BrowserRouter>
       <Routes>
+        {/* Páginas públicas e sem layout */}
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        {/* Rotas com layout padrão */}
-        <Route element={<MainLayout />}>
-          <Route path="/" element={<Home />} />
-          <Route path="/cadastro-veiculo" element={<CadastroVeiculo />} />
-          <Route path="/cadastro-cliente" element={<CadastroCliente />} />
-          <Route path="/cadastro-venda" element={<CadastroVenda />} />
-          <Route path="/veiculos" element={<ListarVeiculos />} />
-          <Route path="/clientes" element={<ListarClientes />} />
-          <Route path="/vendas" element={<ListarVendas />} />
-        </Route>
+        {/* Rotas privadas e com layout */}
+        {/* Home */}
+        <Route
+          path="/"
+          element={
+            <PrivateRoutes>
+              <MainLayout>
+                <Home />
+              </MainLayout>
+            </PrivateRoutes>
+          }
+        />
 
-        {/* Página 404 fora do layout (opcional) */}
+        {/* Cadastros */}
+        <Route
+          path="/cadastro-veiculo"
+          element={
+            <PrivateRoutes>
+              <MainLayout>
+                <CadastroVeiculo />
+              </MainLayout>
+            </PrivateRoutes>
+          }
+        />
+        <Route
+          path="/cadastro-cliente"
+          element={
+            <PrivateRoutes>
+              <MainLayout>
+                <CadastroCliente />
+              </MainLayout>
+            </PrivateRoutes>
+          }
+        />
+        <Route
+          path="/cadastro-venda"
+          element={
+            <PrivateRoutes>
+              <MainLayout>
+                <CadastroVenda />
+              </MainLayout>
+            </PrivateRoutes>
+          }
+        />
+        {/* Listagens */}
+        <Route
+          path="/veiculos"
+          element={
+            <PrivateRoutes>
+              <MainLayout>
+                <ListarVeiculos />
+              </MainLayout>
+            </PrivateRoutes>
+          }
+        />
+        <Route
+          path="/clientes"
+          element={
+            <PrivateRoutes>
+              <MainLayout>
+                <ListarClientes />
+              </MainLayout>
+            </PrivateRoutes>
+          }
+        />
+        <Route
+          path="/vendas"
+          element={
+            <PrivateRoutes>
+              <MainLayout>
+                <ListarVendas />
+              </MainLayout>
+            </PrivateRoutes>
+          }
+        />
+
+        {/* Página 404 */}
         <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>

@@ -2,19 +2,18 @@ import { Link } from "react-router-dom";
 
 const NotFound = () => {
   return (
-    <div>
-      <section className="flex flex-col gap-2 justify-center items-center h-screen">
-        <h1 className="text-4xl font-bold text-center">
-          Ops, página não encontrada!
-        </h1>
-        <Link
-          className="text-2xl font-bold text-center underline hover:text-blue-600 transition-all duration-75"
-          to="/"
-        >
-          Voltar pro início
-        </Link>
-      </section>
-    </div>
+    <main className="bg-gradient-to-b from-slate-100 to-blue-400 flex flex-col gap-4 justify-center items-center h-screen text-center p-4">
+      <h1 className="text-6xl font-bold">404</h1>
+      <p className="text-2xl">Ops, página não encontrada!</p>
+
+      <Link
+        to="/"
+        className="px-4 py-2 bg-blue-600 text-white font-semibold rounded hover:bg-blue-700 transition duration-200"
+      >
+        Voltar pro início
+      </Link>
+    </main>
   );
 };
+
 export default NotFound;
