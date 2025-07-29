@@ -427,6 +427,7 @@ const CadastroClientes = () => {
           onChange={handleChange}
           type="date"
           placeholder="Digite a data da última compra"
+          readOnly
         />
       </div>
 
@@ -442,12 +443,13 @@ const CadastroClientes = () => {
           onChange={handleChange}
           type="number"
           placeholder="Digite a quantidade de veículos comprados"
+          readOnly
         />
       </div>
 
       <button
         type="submit"
-        className="bg-blue-600 text-white px-4 py-2 rounded"
+        className="cursor-pointer bg-blue-600 text-white px-4 py-2 rounded"
       >
         Cadastrar
       </button>

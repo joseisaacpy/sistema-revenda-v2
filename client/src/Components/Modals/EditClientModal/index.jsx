@@ -39,23 +39,27 @@ const EditClienteModal = ({
             className="border p-2 rounded"
           />
           <label htmlFor="pessoa">Tipo</label>
-          <input
-            type="text"
+          <select
             name="pessoa"
-            placeholder="Pessoa (Física/Jurídica)"
+            id="pessoa"
             value={formData.pessoa}
             onChange={handleChange}
             className="border p-2 rounded"
-          />
+          >
+            <option value="fisica">Física</option>
+            <option value="juridica">Jurídica</option>
+          </select>
           <label htmlFor="sexo">Sexo</label>
-          <input
-            type="text"
+          <select
             name="sexo"
-            placeholder="Sexo"
+            id="sexo"
             value={formData.sexo}
             onChange={handleChange}
             className="border p-2 rounded"
-          />
+          >
+            <option value="M">Masculino</option>
+            <option value="F">Feminino</option>
+          </select>
           <label htmlFor="nome">Nome</label>
           <input
             type="text"

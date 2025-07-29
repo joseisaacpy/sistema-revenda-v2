@@ -44,9 +44,7 @@ const Header = () => {
           className="flex items-center gap-2  hover:text-yellow-400 transition-all duration-300"
         >
           <FaTruckPickup className="text-4xl" />
-          <h1 className="hidden md:block text-2xl font-bold">
-            Só Camionetes
-          </h1>
+          <h1 className="hidden md:block text-2xl font-bold">Só Camionetes</h1>
         </Link>
 
         {/* Button menu burguer mobile */}
@@ -135,15 +133,6 @@ const Header = () => {
 
         {/* Ul */}
         <ul className="hidden md:flex gap-6 text-sm" id="menu">
-          <li>
-            <Link
-              className="flex items-center gap-1 transition-transform duration-300 hover:scale-105 hover:text-yellow-400"
-              to="/"
-            >
-              <FaHome />
-              Home
-            </Link>
-          </li>
           <li>
             <Link
               className="flex items-center gap-1 transition-transform duration-300 hover:scale-105 hover:text-yellow-400"

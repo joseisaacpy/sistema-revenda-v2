@@ -320,7 +320,7 @@ const CadastroVenda = () => {
 
       <button
         type="submit"
-        className="bg-blue-600 text-white p-3 rounded-md hover:bg-blue-700 transition duration-200 ease-in-out font-semibold text-lg"
+        className="cursor-pointer bg-blue-600 text-white p-3 rounded-md hover:bg-blue-700 transition duration-200 ease-in-out font-semibold text-lg"
         disabled={loading} // Desabilita o botão enquanto carrega
       >
         {loading ? "Registrando Venda..." : "Registrar Venda"}
