@@ -1,4 +1,6 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Login from "./Pages/Login";
+import Register from "./Pages/Register";
 import Home from "./Pages/Home";
 import NotFound from "./Pages/NotFound";
 import CadastroVeiculo from "./Pages/CadastroVeiculo";
@@ -13,6 +15,8 @@ const AllRoutes = () => {
   return (
     <BrowserRouter>
       <Routes>
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
         {/* Rotas com layout padrão */}
         <Route element={<MainLayout />}>
           <Route path="/" element={<Home />} />
