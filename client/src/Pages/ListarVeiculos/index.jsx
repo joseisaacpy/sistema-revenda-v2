@@ -48,9 +48,17 @@ const ListarVeiculos = () => {
 
   // Buscar todos os clientes
   async function buscarVeiculos() {
+    const token = localStorage.getItem("token");
+
     const url = `${import.meta.env.VITE_API_URL}/api/veiculos`;
     try {
-      const response = await fetch(url);
+      const response = await fetch(url, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
       const data = await response.json();
       setVeiculos(data);
     } catch (error) {

@@ -41,10 +41,17 @@ const CadastroVenda = () => {
     try {
       // URL da API
       const url = `${import.meta.env.VITE_API_URL}`;
+      // Token
+      const token = localStorage.getItem("token");
+      // Headers
+      const headers = {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      };
       // Faz a chamada assíncrona dos dois endpoints
       const [resClientes, resVeiculos] = await Promise.all([
-        fetch(`${url}/api/clientes`),
-        fetch(`${url}/api/veiculos`),
+        fetch(`${url}/api/clientes`, { headers }),
+        fetch(`${url}/api/veiculos`, { headers }),
       ]);
 
       // Verifica se a chamada foi bem sucedida

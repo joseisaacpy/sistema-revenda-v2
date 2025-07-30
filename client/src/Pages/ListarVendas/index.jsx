@@ -17,9 +17,17 @@ const ListarVendas = () => {
 
   // Função para buscar todas as vendas
   async function buscarVendas() {
+    const token = localStorage.getItem("token");
+
     const url = `${import.meta.env.VITE_API_URL}/api/vendas`; // URL da sua API de vendas
     try {
-      const response = await fetch(url);
+      const response = await fetch(url, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
       if (!response.ok) {
         // Verifica se a resposta HTTP foi bem-sucedida (status 2xx)
         const errorData = await response.json();
