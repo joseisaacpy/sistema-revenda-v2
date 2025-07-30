@@ -71,6 +71,9 @@ router.post("/register", async (req, res) => {
     );
     res.status(201).json(result.rows[0]);
   } catch (error) {
+    if (error.code === "23505") {
+      return res.status(409).json({ msg: "Usuário já cadastrado." });
+    }
     res
       .status(500)
       .json({ msg: "Erro ao registrar o usuário.", error: error.message });
