@@ -26,17 +26,18 @@ const AllRoutes = () => {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         {/* Rotas privadas com layout compartilhado */}
-        <Route element={<MainLayout />}>
-          {/* Essas rotas aparecem dentro do <Outlet /> do MainLayout */}
-          <Route index element={<Home />} />
-          <Route path="cadastro-veiculo" element={<CadastroVeiculo />} />
-          <Route path="cadastro-cliente" element={<CadastroCliente />} />
-          <Route path="cadastro-venda" element={<CadastroVenda />} />
-          <Route path="veiculos" element={<ListarVeiculos />} />
-          <Route path="clientes" element={<ListarClientes />} />
-          <Route path="vendas" element={<ListarVendas />} />
+        <Route element={<PrivateRoutes />}>
+          <Route element={<MainLayout />}>
+            {/* Essas rotas aparecem dentro do <Outlet /> do MainLayout */}
+            <Route index element={<Home />} />
+            <Route path="cadastro-veiculo" element={<CadastroVeiculo />} />
+            <Route path="cadastro-cliente" element={<CadastroCliente />} />
+            <Route path="cadastro-venda" element={<CadastroVenda />} />
+            <Route path="veiculos" element={<ListarVeiculos />} />
+            <Route path="clientes" element={<ListarClientes />} />
+            <Route path="vendas" element={<ListarVendas />} />
+          </Route>
         </Route>
-        <Route element={<PrivateRoutes />}></Route>
 
         {/* Página 404 */}
         <Route path="*" element={<NotFound />} />

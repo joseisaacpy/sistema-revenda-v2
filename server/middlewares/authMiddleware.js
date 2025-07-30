@@ -4,11 +4,13 @@ const SECRET_KEY = process.env.SECRET_KEY;
 
 // MIDDLEWARES (será usudo nas rotas protegidas)
 export function verificarToken(req, res, next) {
-  const token = req.headers.autorization?.split(" ")[1];
+  const authHeader = req.headers.authorization;
 
-  if (!token) {
+  if (!authHeader) {
     return res.status(401).json({ msg: "Token não encontrado." });
   }
+
+  const token = authHeader.split(" ")[1];
 
   try {
     const decoded = jwt.verify(token, SECRET_KEY);

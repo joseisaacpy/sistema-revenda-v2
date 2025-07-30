@@ -8,7 +8,6 @@ import { useState, useEffect } from "react";
 import Loader from "../../Components/Loader";
 // Para notificações
 import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css"; // Importe o CSS do Toastify
 
 const ListarVendas = () => {
   // Renomeado para PascalCase
@@ -61,7 +60,7 @@ const ListarVendas = () => {
         <p className="text-red-500 text-lg">{error}</p>
         <button
           onClick={buscarVendas} // Botão para tentar recarregar
-          className="mt-4 bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
+          className="cursor-pointer mt-4 bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
         >
           Tentar Novamente
         </button>
@@ -131,6 +130,7 @@ const ListarVendas = () => {
           </tbody>
         </table>
       </div>
+      <ToastContainer />
     </section>
   );
 };
