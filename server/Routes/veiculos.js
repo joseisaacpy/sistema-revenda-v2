@@ -1,12 +1,13 @@
 // IMPORTS
 import express from "express";
 import db from "../Database/connection.js";
+import { verificarToken } from "../middlewares/authMiddleware.js";
 
 // CONSTANTES
 const router = express.Router();
 
 // CREATE - Cadastrar um novo veículo
-router.post("/", async (req, res) => {
+router.post("/", verificarToken, async (req, res) => {
   const {
     chassi,
     renavam,
@@ -108,7 +109,7 @@ router.post("/", async (req, res) => {
 });
 
 // READ (por status)
-router.get("/", async (req, res) => {
+router.get("/", verificarToken, async (req, res) => {
   try {
     const status = req.query.status?.trim().toLowerCase(); // Pega o status do query parameter
     let queryText = "SELECT * FROM veiculos"; // Consulta base
@@ -147,7 +148,7 @@ router.get("/", async (req, res) => {
 });
 
 // READ (por ID)
-router.get("/:id", async (req, res) => {
+router.get("/:id", verificarToken, async (req, res) => {
   const { id } = req.params;
   try {
     const result = await db.query("SELECT * FROM veiculos WHERE id = $1", [id]);
@@ -215,7 +216,7 @@ router.put("/:id", async (req, res) => {
 });
 
 // DELETE
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", verificarToken, async (req, res) => {
   const { id } = req.params;
 
   try {

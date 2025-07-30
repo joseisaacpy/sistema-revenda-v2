@@ -1,12 +1,13 @@
 // IMPORTS
 import express from "express";
 import db from "../Database/connection.js"; // Seu pool de conexão com o PostgreSQL
+import { verificarToken } from "../middlewares/authMiddleware.js";
 
 // CONSTANTES
 const router = express.Router();
 
 // CREATE - Registrar uma nova venda
-router.post("/", async (req, res) => {
+router.post("/", verificarToken, async (req, res) => {
   // Desestruturar os dados do corpo da requisição
   const {
     id_veiculo,
@@ -129,7 +130,7 @@ router.post("/", async (req, res) => {
 });
 
 // READ - Obter todas as vendas com detalhes de cliente e veículo
-router.get("/", async (req, res) => {
+router.get("/", verificarToken, async (req, res) => {
   try {
     const query = `
       SELECT

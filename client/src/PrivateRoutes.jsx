@@ -1,9 +1,10 @@
-import { Navigate } from "react-router-dom";
+import { Navigate, Outlet } from "react-router-dom";
 
-const PrivateRoutes = ({ children }) => {
+const PrivateRoutes = () => {
+  // Pega o token no localStorage
   const token = localStorage.getItem("token");
-
-  return token ? children : <Navigate to="/login" replace />;
+  // Se tiver token, mostra o conteúdo, se não, redireciona para login
+  return token ? <Outlet /> : <Navigate to="/login" replace />;
 };
 
 export default PrivateRoutes;

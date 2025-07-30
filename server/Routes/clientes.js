@@ -1,13 +1,13 @@
 // IMPORTS
 import express from "express";
 import db from "../Database/connection.js";
-import { verificarToker } from "../middlewares/authMiddleware.js";
+import { verificarToken } from "../middlewares/authMiddleware.js";
 
 // CONSTANTES
 const router = express.Router();
 
 // Create
-router.post("/", async (req, res) => {
+router.post("/", verificarToken, async (req, res) => {
   const {
     cpf_cnpj,
     pessoa,
@@ -84,7 +84,7 @@ router.post("/", async (req, res) => {
 });
 
 // Read todos
-router.get("/", verificarToker, async (req, res) => {
+router.get("/", verificarToken, async (req, res) => {
   try {
     const clientes = await db.query("SELECT * FROM clientes");
     res.json(clientes.rows);
@@ -95,7 +95,7 @@ router.get("/", verificarToker, async (req, res) => {
 });
 
 // Read por ID
-router.get("/:id", async (req, res) => {
+router.get("/:id", verificarToken, async (req, res) => {
   try {
     const { id } = req.params;
     const cliente = await db.query("SELECT * FROM clientes WHERE id=$1", [id]);
@@ -162,7 +162,7 @@ router.put("/:id", async (req, res) => {
 });
 
 // Delete
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", verificarToken, async (req, res) => {
   try {
     const { id } = req.params;
     const result = await db.query("DELETE FROM clientes WHERE id = $1", [id]);

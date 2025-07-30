@@ -1,8 +1,6 @@
 import { useState } from "react";
 // Para notificações
 import { ToastContainer, toast } from "react-toastify";
-// Para criar máscara nos inputs
-import InputMask from "react-input-mask";
 
 const CadastroClientes = () => {
   // Estado para armazenar os dados (todos os campos iniciam vazios)
