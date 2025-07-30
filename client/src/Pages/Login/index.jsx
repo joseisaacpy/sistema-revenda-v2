@@ -1,8 +1,11 @@
 import imgCars from "../../Assets/Images/cars.webp";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { ToastContainer, toast } from "react-toastify";
 
 const Login = () => {
+  // Navigate
+  const navigate = useNavigate();
   // Estados pra lidar com o preenchimento do formulário
   const [formData, setFormData] = useState({ email: "", password: "" });
 
@@ -13,6 +16,42 @@ const Login = () => {
       ...prevData,
       [name]: value,
     }));
+  };
+
+  // Função pra lidar com o login
+  const handleSubmit = async (e) => {
+    e.preventDefault(); // Impede o envio do formulário
+    const { email, password } = formData;
+    const url = "http://localhost:8080/api/auth/login";
+    if (!email || !password) {
+      return toast.error("Preencha todos os campos!");
+    }
+    try {
+      const response = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email: email, senha: password }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        return toast.error(data.msg || "Erro ao fazer login!");
+      }
+
+      // Guarda o token no localStorage
+      localStorage.setItem("token", data.token);
+
+      toast.success("Login realizado com sucesso! Redirecionando...");
+      setTimeout(() => {
+        navigate("/");
+      }, 3000);
+    } catch (error) {
+      console.log("Erro ao fazer login:", error);
+      toast.error("Erro ao fazer login!");
+    }
   };
 
   // Para mudar o titulo da aba
@@ -26,7 +65,10 @@ const Login = () => {
       {/* Seção do form */}
       <section className="md:flex-1 flex flex-col items-center justify-center bg-white p-5 lg:rounded-l-2xl shadow-2xs">
         {/* Formulário */}
-        <form className="flex w-full max-w-lg mx-auto flex-col gap-6">
+        <form
+          className="flex w-full max-w-lg mx-auto flex-col gap-6"
+          onSubmit={handleSubmit}
+        >
           <h1 className="text-3xl font-bold">Login</h1>
           <div className="flex flex-col">
             <label htmlFor="email">Email</label>
@@ -45,8 +87,8 @@ const Login = () => {
             <label htmlFor="senha">Senha</label>
             <input
               type="password"
-              name="senha"
-              id="senha"
+              name="password"
+              id="password"
               autoComplete="current-password"
               className="border p-2 rounded-[5px]"
               placeholder="Digite sua senha"
@@ -77,6 +119,7 @@ const Login = () => {
           className="w-full h-full max-h-screen object-cover rounded-r-2xl"
         />
       </section>
+      <ToastContainer autoClose={3000} />
     </section>
   );
 };

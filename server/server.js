@@ -7,6 +7,7 @@ import dotenv from "dotenv";
 import clientesRoutes from "./Routes/clientes.js";
 import veiculosRoutes from "./Routes/veiculos.js";
 import vendasRoutes from "./Routes/vendas.js";
+import authRoutes from "./Routes/auth.js";
 // import { fileURLToPath } from "url";
 // import { dirname } from "path";
 
@@ -40,6 +41,7 @@ app.use(limiter); // Aplica em todas as rotas o limitador
 app.use("/api/clientes", clientesRoutes);
 app.use("/api/veiculos", veiculosRoutes);
 app.use("/api/vendas", vendasRoutes);
+app.use("/api/auth", authRoutes);
 
 // Inicia o servidor
 app.listen(port, "0.0.0.0", () => {

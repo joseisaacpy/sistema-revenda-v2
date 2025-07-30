@@ -36,10 +36,10 @@ const Register = () => {
             <label htmlFor="nome">Nome completo</label>
             <input
               type="text"
-              name="nome"
+              name="name"
               autoComplete="name"
               required
-              id="nome"
+              id="name"
               className="border p-2 rounded-[5px]"
               placeholder="Digite seu nome completo"
               value={formData.name}
@@ -64,8 +64,8 @@ const Register = () => {
             <label htmlFor="senha">Senha</label>
             <input
               type="password"
-              name="senha"
-              id="senha"
+              name="password"
+              id="password"
               required
               autoComplete="current-password"
               className="border p-2 rounded-[5px]"
