@@ -38,6 +38,10 @@ app.use(express.urlencoded({ extended: true })); // Para receber dados de formul
 app.use(limiter); // Aplica em todas as rotas o limitador
 
 // Rotas
+app.get("/", (req, res) => {
+  res.send("Bem-vindo ao servidor!");
+});
+
 app.use("/api/clientes", clientesRoutes);
 app.use("/api/veiculos", veiculosRoutes);
 app.use("/api/vendas", vendasRoutes);
