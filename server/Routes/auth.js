@@ -63,6 +63,18 @@ router.post("/login", async (req, res) => {
 // REGISTRO
 router.post("/register", async (req, res) => {
   const { nome, email, senha } = req.body;
+  // Valida se os campos estão preenchidos
+  if (!nome || !email || !senha) {
+    return res
+      .status(400)
+      .json({ msg: "Todos os campos devem ser preenchidos." });
+  }
+  // Valida se a senha tem pelo menos 6 caracteres
+  if (senha.length < 6) {
+    return res
+      .status(400)
+      .json({ msg: "A senha deve ter no mínimo 6 caracteres." });
+  }
   try {
     const hash = await bcrypt.hash(senha, 10);
     const result = await db.query(

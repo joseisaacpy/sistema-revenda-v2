@@ -45,9 +45,11 @@ const Login = () => {
       localStorage.setItem("token", data.token);
 
       toast.success("Login realizado com sucesso! Redirecionando...");
+
+      // Manda pra home
       setTimeout(() => {
         navigate("/");
-      }, 3000);
+      }, 2500);
     } catch (error) {
       console.log("Erro ao fazer login:", error);
       toast.error("Erro ao fazer login!");
@@ -76,6 +78,7 @@ const Login = () => {
               type="email"
               name="email"
               id="email"
+              autoFocus
               autoComplete="email"
               className="border p-2 rounded-[5px]"
               placeholder="Digite seu email"
@@ -119,7 +122,7 @@ const Login = () => {
           className="w-full h-full max-h-screen object-cover rounded-r-2xl"
         />
       </section>
-      <ToastContainer autoClose={3000} />
+      <ToastContainer autoClose={2000} />
     </section>
   );
 };
