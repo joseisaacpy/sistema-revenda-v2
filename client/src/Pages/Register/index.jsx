@@ -26,7 +26,7 @@ const Register = () => {
 
   // Função para lidar com o cadastro
   const handleSubmit = async (e) => {
-    const url = "http://localhost:8080/api/auth/register";
+    const url = `${import.meta.env.VITE_API_URL}/api/auth/register`;
     console.log("Dados recebidos:", formData);
 
     e.preventDefault(); // Impede o envio do formulário

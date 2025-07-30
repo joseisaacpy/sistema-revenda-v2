@@ -22,7 +22,7 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault(); // Impede o envio do formulário
     const { email, password } = formData;
-    const url = "http://localhost:8080/api/auth/login";
+    const url = `${import.meta.env.VITE_API_URL}/api/auth/login`;
     if (!email || !password) {
       return toast.error("Preencha todos os campos!");
     }

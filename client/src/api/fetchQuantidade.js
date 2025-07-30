@@ -2,7 +2,6 @@
 const fetchQuantidade = async (endpoint) => {
   try {
     const token = localStorage.getItem("token");
-    console.log("Enviando token:", token); // <- confirme que aparece no console
 
     const response = await fetch(`${import.meta.env.VITE_API_URL}${endpoint}`, {
       method: "GET",

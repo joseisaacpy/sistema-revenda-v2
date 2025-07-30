@@ -161,7 +161,6 @@ const CadastroVenda = () => {
           errorData.error || "Erro desconhecido ao cadastrar venda.";
         toast.error(`Erro: ${errorMessage}`);
         console.error("Erro no backend:", errorData);
-        console.log(url);
       }
     } catch (error) {
       console.error("Erro ao enviar venda:", error);
