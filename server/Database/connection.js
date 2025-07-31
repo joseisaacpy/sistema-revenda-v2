@@ -8,6 +8,7 @@ const { Pool } = pg;
 
 // Cria o pool
 const pool = new Pool({
+  max: 5, // Máximo de conexões simultaneas
   connectionString: process.env.DATABASE_PUBLIC_URL,
   ssl:
     process.env.NODE_ENV === "production"
