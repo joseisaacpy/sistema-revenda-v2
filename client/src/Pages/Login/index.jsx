@@ -38,7 +38,13 @@ const Login = () => {
       const data = await response.json();
 
       if (!response.ok) {
-        return toast.error(data.msg || "Erro ao fazer login!");
+        if (data && data.msg) {
+          return toast.error(data.msg); // Mensagem personalizada do backend
+        } else {
+          return toast.error(
+            "Erro ao fazer login! Verifique suas credenciais."
+          );
+        }
       }
 
       // Guarda o token no localStorage

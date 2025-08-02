@@ -30,7 +30,7 @@ router.post("/login", async (req, res) => {
 
     // Se a senha for incorreta
     if (!senhaCorreta) {
-      return res.status(401).json({ error: "Senha incorreta." });
+      return res.status(401).json({ msg: "Senha incorreta." });
     }
     const token = jwt.sign(
       {
