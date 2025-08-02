@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 // Para notificações
 import { ToastContainer, toast } from "react-toastify";
 
@@ -124,6 +124,10 @@ const CadastroClientes = () => {
       console.error("Erro ao enviar os dados:", error);
     }
   };
+  // useEffect para mudar o title
+  useEffect(() => {
+    document.title = "Cadastro de Clientes";
+  });
 
   return (
     <form

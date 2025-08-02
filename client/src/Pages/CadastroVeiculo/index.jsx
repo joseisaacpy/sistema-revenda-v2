@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 // Para notificações
 import { ToastContainer, toast } from "react-toastify";
 
@@ -78,6 +78,11 @@ const CadastroVeiculos = () => {
       console.error("Erro ao cadastrar carro:", error);
     }
   };
+
+  // useEffect para mudar o title
+  useEffect(() => {
+    document.title = "Cadastro de Veículos";
+  });
 
   return (
     <form

@@ -53,6 +53,8 @@ const ListarVendas = () => {
   // Chama a função buscarVendas ao montar o componente
   useEffect(() => {
     buscarVendas();
+    // Muda o title
+    document.title = "Listagem de Vendas";
   }, []); // Array de dependências vazio para rodar apenas uma vez na montagem
 
   if (loading) {

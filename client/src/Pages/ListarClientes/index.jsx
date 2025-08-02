@@ -139,6 +139,8 @@ const ListarClientes = () => {
   // Chama a função buscarClientes ao montar o componente
   useEffect(() => {
     buscarClientes();
+    // Muda o title
+    document.title = "Listagem de Clientes";
   }, []);
 
   if (loading) {

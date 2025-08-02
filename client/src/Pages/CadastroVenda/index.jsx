@@ -111,6 +111,8 @@ const CadastroVenda = () => {
   useEffect(() => {
     // Chama a função
     fetchData();
+    // Muda o title da aba
+    document.title = "Cadastro de Venda";
   }, []);
 
   //   Função pra lidar com o envio do form

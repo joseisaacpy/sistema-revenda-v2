@@ -71,6 +71,8 @@ const ListarVeiculos = () => {
   // Chama a função buscarClientes ao montar o componente
   useEffect(() => {
     buscarVeiculos();
+    // Muda o title
+    document.title = "Listagem de Veículos";
   }, []);
 
   if (loading) {
