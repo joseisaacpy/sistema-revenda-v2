@@ -1,6 +1,7 @@
+// Importa funções auxiliares
+import { detectarCapsLock } from "../../utils/teclado";
 import imgCars from "../../Assets/Images/cars.webp";
 import { Link, useNavigate } from "react-router-dom";
-import { detectarCapsLock } from "../../utils/detectarCapsLock";
 import { useEffect, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 

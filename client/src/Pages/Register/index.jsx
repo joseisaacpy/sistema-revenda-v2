@@ -1,6 +1,6 @@
 import imgCars from "../../Assets/Images/cars.webp";
 import { Link } from "react-router-dom";
-import { detectarCapsLock } from "../../utils/detectarCapsLock";
+import { detectarCapsLock } from "../../utils/teclado";
 import { useEffect, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
