@@ -1,11 +1,20 @@
 import imgCars from "../../Assets/Images/cars.webp";
 import { Link, useNavigate } from "react-router-dom";
+import { detectarCapsLock } from "../../utils/detectarCapsLock";
 import { useEffect, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 
 const Login = () => {
+  // Estado para detectar capsLock
+  const [capsLock, setCapsLock] = useState(false);
+  // Função para detectar capsLock
+  const handleKeyUp = (event) => {
+    setCapsLock(detectarCapsLock(event));
+  };
+
   // Navigate
   const navigate = useNavigate();
+
   // Estados pra lidar com o preenchimento do formulário
   const [formData, setFormData] = useState({ email: "", password: "" });
 
@@ -90,6 +99,8 @@ const Login = () => {
               placeholder="Digite seu email"
               value={formData.email}
               onChange={handleChange}
+              onKeyUp={handleKeyUp}
+              onKeyDown={handleKeyUp}
             />
           </div>
           <div className="flex flex-col">
@@ -103,8 +114,15 @@ const Login = () => {
               placeholder="Digite sua senha"
               value={formData.password}
               onChange={handleChange}
+              onKeyUp={handleKeyUp}
+              onKeyDown={handleKeyUp}
             />
           </div>
+          {capsLock && (
+            <p className="text-sm text-center text-red-600">
+              Caps Lock está ativado!
+            </p>
+          )}
           <span className="text-sm text-center">
             Ainda não tem uma conta?{" "}
             <Link to="/register" className="text-blue-600 hover:underline">
