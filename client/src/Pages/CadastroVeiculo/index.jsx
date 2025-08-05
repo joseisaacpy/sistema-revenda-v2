@@ -87,7 +87,7 @@ const CadastroVeiculos = () => {
   return (
     <form
       onSubmit={handleSubmit}
-      className="space-y-4 flex flex-col gap-4 border border-gray-300 p-4 rounded-lg bg-blue-100"
+      className="space-y-4 flex flex-col gap-4 border border-gray-300 p-4 rounded-lg bg-blue-50"
       id="veiculoForm"
     >
       <h1 className="text-2xl font-bold">Cadastro de Veículos</h1>
