@@ -23,11 +23,6 @@ const CadastroClientes = () => {
     estado: "",
     cidade: "",
     complemento: "",
-    cargo: "",
-    nome_mae: "",
-    nome_pai: "",
-    data_ultima_compra: "",
-    quantidade_veic_comprados: "",
   });
 
   const handleChange = (e) => {
@@ -106,11 +101,6 @@ const CadastroClientes = () => {
           estado: "",
           cidade: "",
           complemento: "",
-          cargo: "",
-          nome_mae: "",
-          nome_pai: "",
-          data_ultima_compra: "",
-          quantidade_veic_comprados: "",
         });
         // Limpa os erros
         setErrors({});
@@ -380,72 +370,6 @@ const CadastroClientes = () => {
           value={formData.complemento}
           onChange={handleChange}
           placeholder="Digite o complemento"
-        />
-      </div>
-
-      <div className="flex flex-col">
-        <label htmlFor="cargo">Cargo:</label>
-        <input
-          className="border p-2 rounded-md"
-          id="cargo"
-          name="cargo"
-          value={formData.cargo}
-          onChange={handleChange}
-          placeholder="Digite o cargo do cliente"
-        />
-      </div>
-
-      <div className="flex flex-col">
-        <label htmlFor="nome_mae">Nome da Mãe:</label>
-        <input
-          className="border p-2 rounded-md"
-          id="nome_mae"
-          name="nome_mae"
-          value={formData.nome_mae}
-          onChange={handleChange}
-          placeholder="Digite o nome da mãe do cliente"
-        />
-      </div>
-
-      <div className="flex flex-col">
-        <label htmlFor="nome_pai">Nome do Pai:</label>
-        <input
-          className="border p-2 rounded-md"
-          id="nome_pai"
-          name="nome_pai"
-          value={formData.nome_pai}
-          onChange={handleChange}
-          placeholder="Digite o nome do pai do cliente"
-        />
-      </div>
-
-      <div className="flex flex-col">
-        <label htmlFor="data_ultima_compra">Data da Última Compra:</label>
-        <input
-          className="border p-2 rounded-md"
-          id="data_ultima_compra"
-          name="data_ultima_compra"
-          value={formData.data_ultima_compra}
-          onChange={handleChange}
-          type="date"
-          placeholder="Digite a data da última compra"
-          readOnly
-        />
-      </div>
-
-      <div className="flex flex-col">
-        <label htmlFor="quantidade_veic_comprados">
-          Quantidade de Veículos Comprados:
-        </label>
-        <input
-          className="border p-2 rounded-md"
-          id="quantidade_veic_comprados"
-          name="quantidade_veic_comprados"
-          value={formData.quantidade_veic_comprados}
-          onChange={handleChange}
-          type="number"
-          placeholder="Digite a quantidade de veículos comprados"
-          readOnly
         />
       </div>
 
