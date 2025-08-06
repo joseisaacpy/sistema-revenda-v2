@@ -2,7 +2,6 @@
 import { Router } from "express";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import db from "../Database/connection.js";
 import prisma from "../Lib/prisma.js";
 
 // CONSTANTES
