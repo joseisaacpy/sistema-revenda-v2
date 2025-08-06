@@ -8,8 +8,6 @@ import clientesRoutes from "./Routes/clientes.js";
 import veiculosRoutes from "./Routes/veiculos.js";
 import vendasRoutes from "./Routes/vendas.js";
 import authRoutes from "./Routes/auth.js";
-// import { fileURLToPath } from "url";
-// import { dirname } from "path";
 
 // Configura o dotenv
 dotenv.config();
@@ -27,9 +25,6 @@ const limiter = rateLimit({
   legacyHeaders: false, // Desativa o cabeçalho `X-RateLimit-*`
 });
 
-// const __filename = fileURLToPath(import.meta.url);
-// const __dirname = dirname(__filename);
-
 // Middleares
 // app.use(cors()); // Para permitir requisicoes de outras origens
 app.use(cors());
@@ -41,7 +36,6 @@ app.use(limiter); // Aplica em todas as rotas o limitador
 app.get("/", (req, res) => {
   res.send("Bem-vindo ao servidor!");
 });
-
 app.use("/api/clientes", clientesRoutes);
 app.use("/api/veiculos", veiculosRoutes);
 app.use("/api/vendas", vendasRoutes);
