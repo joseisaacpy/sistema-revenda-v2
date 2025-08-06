@@ -36,10 +36,10 @@ app.use(limiter); // Aplica em todas as rotas o limitador
 app.get("/", (req, res) => {
   res.send("Bem-vindo ao servidor!");
 });
+app.use("/api/auth", authRoutes);
 app.use("/api/clientes", clientesRoutes);
 app.use("/api/veiculos", veiculosRoutes);
 app.use("/api/vendas", vendasRoutes);
-app.use("/api/auth", authRoutes);
 
 // Inicia o servidor
 app.listen(port, "0.0.0.0", () => {
