@@ -1,5 +1,5 @@
 // Importa icones (se você for usar)
-// import { FaEdit, FaTrash } from "react-icons/fa"; // Removido se não for usar
+import { FaRegFilePdf } from "react-icons/fa";
 
 // Importa as bibliotecas
 import { useState, useEffect } from "react";
@@ -49,6 +49,42 @@ const ListarVendas = () => {
       setLoading(false); // Define o estado de carregamento como false, independentemente do sucesso/erro
     }
   }
+
+  // Função pra lidar com o Download do recibo
+  const handleDownloadPDF = async (vendaId) => {
+    try {
+      const token = localStorage.getItem("token");
+      const apiUrl = `${
+        import.meta.env.VITE_API_URL
+      }/api/vendas/${vendaId}/recibo`;
+
+      const response = await fetch(apiUrl, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error("Erro ao gerar o recibo");
+      }
+
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+
+      // Abre em nova aba ou baixa direto
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `recibo-venda-${vendaId}.pdf`;
+      link.target = "_blank";
+      link.click();
+
+      // Limpa o objeto depois de um tempo
+      setTimeout(() => window.URL.revokeObjectURL(url), 1000);
+    } catch (error) {
+      console.error("Erro ao baixar o recibo:", error);
+      alert("Erro ao gerar recibo em PDF");
+    }
+  };
 
   // Chama a função buscarVendas ao montar o componente
   useEffect(() => {
@@ -103,13 +139,12 @@ const ListarVendas = () => {
           <thead className="bg-gray-100">
             <tr>
               <th className="text-left p-2 border">Data da Venda</th>
-              <th className="text-left p-2 border">Cliente</th>{" "}
-              {/* Novo campo */}
-              <th className="text-left p-2 border">Veículo</th>{" "}
-              {/* Novo campo */}
+              <th className="text-left p-2 border">Cliente</th>
+              <th className="text-left p-2 border">Veículo</th>
               <th className="text-left p-2 border">Valor da Venda</th>
               <th className="text-left p-2 border">Forma de Pagamento</th>
               <th className="text-left p-2 border">Observação</th>
+              <th className="text-left p-2 border">Ações</th>
             </tr>
           </thead>
           <tbody>
@@ -118,14 +153,13 @@ const ListarVendas = () => {
                 <td className="p-2 border">
                   {new Date(venda.data_venda).toLocaleDateString("pt-BR")}
                 </td>
-                {/* Dados do cliente e veículo: dependem do JOIN no backend */}
                 <td className="p-2 border">
-                  {venda.cliente_nome || "N/A"} -{" "}
+                  {venda.cliente_nome || "N/A"} -
                   {venda.cliente_cpf_cnpj || "N/A"}
                 </td>
                 <td className="p-2 border">
-                  {venda.veiculo_marca || "N/A"} {venda.veiculo_modelo || "N/A"}{" "}
-                  ({venda.veiculo_placa || "N/A"})
+                  {venda.veiculo_marca || "N/A"} {venda.veiculo_modelo || "N/A"}
+                  - ({venda.veiculo_placa || "N/A"})
                 </td>
                 <td className="p-2 border">
                   {new Intl.NumberFormat("pt-BR", {
@@ -135,6 +169,12 @@ const ListarVendas = () => {
                 </td>
                 <td className="p-2 border">{venda.forma_pagamento}</td>
                 <td className="p-2 border">{venda.observacoes || "N/A"}</td>
+                <td className="p-2 border">
+                  <FaRegFilePdf
+                    onClick={() => handleDownloadPDF(venda.id)}
+                    className="cursor-pointer"
+                  />
+                </td>
               </tr>
             ))}
           </tbody>
