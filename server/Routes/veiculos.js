@@ -1,7 +1,6 @@
 // IMPORTS
 import express from "express";
-import db from "../Database/connection.js";
-import { verificarToken } from "../middlewares/authMiddleware.js";
+import { verificarToken } from "../Middlewares/authMiddleware.js";
 import prisma from "../Lib/prisma.js";
 
 // CONSTANTES

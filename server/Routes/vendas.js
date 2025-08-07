@@ -1,6 +1,5 @@
 // IMPORTS
 import express from "express";
-import db from "../Database/connection.js"; // Seu pool de conexão com o PostgreSQL
 import { verificarToken } from "../middlewares/authMiddleware.js";
 import prisma from "../Lib/prisma.js";
 import PDFDocument from "pdfkit";

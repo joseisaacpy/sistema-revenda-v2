@@ -1,7 +1,6 @@
 // IMPORTS
 import express from "express";
-import db from "../Database/connection.js";
-import { verificarToken } from "../middlewares/authMiddleware.js";
+import { verificarToken } from "../Middlewares/authMiddleware.js";
 import prisma from "../Lib/prisma.js";
 
 // CONSTANTES
@@ -41,12 +40,12 @@ router.post("/", verificarToken, async (req, res) => {
     typeof value === "string" && value.trim() !== "" ? value.trim() : null;
 
   try {
-    const novoCliente = await prisma.clientes.create({
+    await prisma.clientes.create({
       data: {
         cpf_cnpj: sanitize(cpf_cnpj),
         pessoa: sanitize(pessoa),
         sexo: sanitize(sexo),
-        nome: sanitize(nome), // nome é obrigatório, mas ainda sanitize
+        nome: sanitize(nome),
         telefone_celular: sanitize(telefone_celular),
         telefone_comercial: sanitize(telefone_comercial),
         rg: sanitize(rg),
@@ -103,10 +102,9 @@ router.get("/:id", verificarToken, async (req, res) => {
 });
 
 // Update
-// Update
-router.put("/:id", async (req, res) => {
+router.put("/:id", verificarToken, async (req, res) => {
   try {
-    const { id } = req.params;
+    const id = Number(req.params.id);
     const {
       nome,
       cpf_cnpj,
@@ -121,30 +119,29 @@ router.put("/:id", async (req, res) => {
       estado,
     } = req.body;
 
-    const result = await db.query(
-      `UPDATE clientes 
-       SET nome=$1, cpf_cnpj=$2, dataNascimento=$3, email=$4, telefone_celular=$5,
-           cep=$6, rua=$7, numero=$8, bairro=$9, cidade=$10, estado=$11
-       WHERE id=$12`,
-      [
-        nome,
-        cpf_cnpj,
-        dataNascimento || null,
-        email || null,
-        telefone,
-        cep || null,
-        rua || null,
-        numero || null,
-        bairro || null,
-        cidade || null,
-        estado || null,
-        id,
-      ]
-    );
-
-    if (result.rowCount === 0) {
+    const clienteExistente = await prisma.clientes.findUnique({
+      where: { id },
+    });
+    if (!clienteExistente) {
       return res.status(404).json({ error: "Cliente não encontrado." });
     }
+
+    await prisma.clientes.update({
+      where: { id },
+      data: {
+        nome,
+        cpf_cnpj,
+        data_nascimento: dataNascimento || null,
+        email,
+        telefone_celular: telefone,
+        cep,
+        rua,
+        numero,
+        bairro,
+        cidade,
+        estado,
+      },
+    });
 
     res.json({ message: "Cliente atualizado com sucesso." });
   } catch (error) {

@@ -2,7 +2,7 @@
 import jwt from "jsonwebtoken";
 const SECRET_KEY = process.env.SECRET_KEY;
 
-// MIDDLEWARES (será usudo nas rotas protegidas)
+// MIDDLEWARE (será usudo nas rotas protegidas)
 export function verificarToken(req, res, next) {
   const authHeader = req.headers.authorization;
 

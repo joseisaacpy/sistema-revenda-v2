@@ -28,7 +28,7 @@ const limiter = rateLimit({
 // Middleares
 app.use(
   cors({
-    origin: "*", // ou especifique os domínios em produção
+    origin: "*",
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"],
     allowedHeaders: ["Content-Type", "Authorization"],
     credentials: true, // para aceitar cookies e headers com token
