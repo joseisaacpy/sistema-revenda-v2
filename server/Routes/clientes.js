@@ -28,11 +28,6 @@ router.post("/", verificarToken, async (req, res) => {
     estado,
     cidade,
     complemento,
-    cargo,
-    nome_mae,
-    nome_pai,
-    data_ultima_compra,
-    quantidade_veic_comprados,
   } = req.body;
 
   if (!nome || !cpf_cnpj || !telefone_celular) {
@@ -41,42 +36,34 @@ router.post("/", verificarToken, async (req, res) => {
     });
   }
 
+  // Função para limpar strings vazias e nulas
+  const sanitize = (value) =>
+    typeof value === "string" && value.trim() !== "" ? value.trim() : null;
+
   try {
-    // Funções para auxiliar na limpeza dos dados
-    const sanitize = (value) => (value && value.trim() !== "" ? value : null);
-    const parseNumber = (value) => Number(value) || 0;
+    const novoCliente = await prisma.clientes.create({
+      data: {
+        cpf_cnpj: sanitize(cpf_cnpj),
+        pessoa: sanitize(pessoa),
+        sexo: sanitize(sexo),
+        nome: sanitize(nome), // nome é obrigatório, mas ainda sanitize
+        telefone_celular: sanitize(telefone_celular),
+        telefone_comercial: sanitize(telefone_comercial),
+        rg: sanitize(rg),
+        ie: sanitize(ie),
+        data_nascimento: sanitize(data_nascimento) || null,
+        data_cadastro: sanitize(data_cadastro) || new Date().toISOString(),
+        email: sanitize(email),
+        cep: sanitize(cep),
+        rua: sanitize(rua),
+        numero: sanitize(numero),
+        bairro: sanitize(bairro),
+        estado: sanitize(estado),
+        cidade: sanitize(cidade),
+        complemento: sanitize(complemento),
+      },
+    });
 
-    await db.query(
-      `INSERT INTO clientes
-      (cpf_cnpj,pessoa,sexo,nome,telefone_celular,telefone_comercial,rg,ie,data_nascimento,data_cadastro,email,cep,rua,numero,bairro,estado,cidade,complemento,cargo,nome_mae,nome_pai,data_ultima_compra,quantidade_veic_comprados)
-      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21,$22,$23)`,
-
-      [
-        cpf_cnpj,
-        sanitize(pessoa),
-        sanitize(sexo),
-        nome,
-        telefone_celular,
-        sanitize(telefone_comercial),
-        sanitize(rg),
-        sanitize(ie),
-        sanitize(data_nascimento),
-        sanitize(data_cadastro) || new Date(),
-        sanitize(email),
-        sanitize(cep),
-        sanitize(rua),
-        sanitize(numero),
-        sanitize(bairro),
-        sanitize(estado),
-        sanitize(cidade),
-        sanitize(complemento),
-        sanitize(cargo),
-        sanitize(nome_mae),
-        sanitize(nome_pai),
-        sanitize(data_ultima_compra),
-        parseNumber(quantidade_veic_comprados),
-      ]
-    );
     res.status(201).json({ message: "Cliente criado com sucesso." });
   } catch (error) {
     console.error("Erro ao criar o cliente:", error.message);
