@@ -3,6 +3,7 @@ import express from "express";
 import db from "../Database/connection.js"; // Seu pool de conexão com o PostgreSQL
 import { verificarToken } from "../middlewares/authMiddleware.js";
 import prisma from "../Lib/prisma.js";
+import PDFDocument from "pdfkit";
 
 // CONSTANTES
 const router = express.Router();
@@ -170,6 +171,111 @@ router.get("/", verificarToken, async (req, res) => {
     res
       .status(500)
       .json({ error: "Erro interno do servidor ao buscar as vendas." });
+  }
+});
+
+// GET por ID
+router.get("/:id", verificarToken, async (req, res) => {
+  try {
+    const venda = await prisma.vendas.findUnique({
+      where: {
+        id: Number(req.params.id),
+      },
+    });
+
+    if (!venda) {
+      return res.status(404).json({ error: "Venda não encontrada." });
+    }
+
+    res.json(venda);
+  } catch (error) {
+    console.error("Erro ao buscar venda:", error);
+    res.status(500).json({ error: "Erro ao buscar venda." });
+  }
+});
+
+//
+router.get("/:id/recibo", verificarToken, async (req, res) => {
+  try {
+    const venda = await prisma.vendas.findUnique({
+      where: {
+        id: Number(req.params.id),
+      },
+      include: {
+        clientes: true,
+        veiculos: true,
+      },
+    });
+
+    if (!venda) {
+      return res.status(404).json({ error: "Venda não encontrada." });
+    }
+    // Configuração do PDF
+    const doc = new PDFDocument();
+    res.setHeader("Content-Type", "application/pdf");
+    res.setHeader(
+      "Content-Disposition",
+      `inline; filename=recibo-venda-${venda.id}.pdf`
+    );
+    doc.pipe(res);
+
+    // Dados para o recibo
+    const dataFormatada = new Date(venda.data_venda).toLocaleDateString(
+      "pt-BR"
+    );
+    const valorFormatado = Number(venda.valor_venda).toLocaleString("pt-BR", {
+      style: "currency",
+      currency: "BRL",
+    });
+    // Imagem logo do recibo ou título com nome da empresa
+    doc.fontSize(35).text("SÓ CAMIONETES", { align: "center",  });
+    doc.fontSize(25).text("(86)99986-7265", { align: "right" });
+
+    // Imagem no topo como header
+    // doc.image("../server/images/carro.jpeg", {
+    //   fit: [500, 200], // Largura e altura da imagem
+    //   align: "center", // Centralizada
+    //   valign: "top", // No topo
+    //   x: doc.page.margins.left, // Início respeitando margem esquerda
+    //   y: 30, // Distância do topo da página
+    // });
+
+    // Espaço após a imagem
+    doc.moveDown(3); // Adiciona várias linhas em branco (~5 linhas de espaçamento)
+
+    // Cabecalho
+    doc.fontSize(18).text("CONTRATO DE VENDA", { align: "left" });
+    doc.fontSize(18).text(`${valorFormatado}`, { align: "right" });
+    doc.moveDown();
+
+    doc
+      .fontSize(12)
+      .text(
+        `Eu, ${venda.clientes.nome}, inscrito sob o CPF/CNPJ ${venda.clientes.cpf_cnpj},`
+      );
+    doc.text(
+      `declaro que adquiri o veículo ${venda.veiculos.modelo} / ${venda.veiculos.marca},`
+    );
+    doc.text(
+      `placa ${venda.veiculos.placa}, ano/modelo ${venda.veiculos.ano_modelo}, cor ${venda.veiculos.cor},`
+    );
+    doc.text(`no valor de R$ ${parseFloat(venda.valor_venda).toFixed(2)},`);
+    doc.text(`pago via ${venda.forma_pagamento}, na data de ${dataFormatada}.`);
+    doc.moveDown();
+    doc.text(`Observações: ${venda.observacoes || "Nenhuma"}`);
+    doc.moveDown().moveDown();
+
+    doc.text("Assinatura do Vendedor: __________________________", {
+      align: "left",
+    });
+    doc.text("Assinatura do Comprador: _________________________", {
+      align: "left",
+    });
+
+    doc.end();
+  } catch (error) {
+    console.error("Erro ao gerar o recibo:", error);
+    res.status(500).json({ error: "Erro ao gerar o recibo." });
   }
 });
 
