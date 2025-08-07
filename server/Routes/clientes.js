@@ -154,21 +154,21 @@ router.put("/:id", async (req, res) => {
 });
 
 // Delete
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", verificarToken, async (req, res) => {
+  const id = Number(req.params.id);
+
+  if (isNaN(id)) {
+    return res.status(400).json({ error: "ID inválido." });
+  }
+
   try {
-    // Primeiro, verifica se o cliente existe
-    const cliente = await prisma.clientes.findUnique({
-      where: { id: Number(req.params.id) },
-    });
+    const cliente = await prisma.clientes.findUnique({ where: { id } });
 
     if (!cliente) {
       return res.status(404).json({ error: "Cliente não encontrado." });
     }
 
-    // Se existir, deleta
-    await prisma.clientes.delete({
-      where: { id: Number(req.params.id) },
-    });
+    await prisma.clientes.delete({ where: { id } });
 
     res.json({ message: "Cliente deletado com sucesso." });
   } catch (error) {
