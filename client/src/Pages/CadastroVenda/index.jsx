@@ -127,6 +127,7 @@ const CadastroVenda = () => {
     setLoading(true); // Ativa o loading para o envio
     try {
       const url = `${import.meta.env.VITE_API_URL}`;
+      const token = localStorage.getItem("token");
       const payload = {
         id_cliente: parseInt(formData.id_cliente),
         id_veiculo: parseInt(formData.id_veiculo),
@@ -140,6 +141,7 @@ const CadastroVenda = () => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(payload), // Envia o payload com os tipos corretos
       });

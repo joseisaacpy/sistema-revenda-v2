@@ -60,16 +60,18 @@ const ListarClientes = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch(
-        `${import.meta.env.VITE_API_URL}/api/clientes/${
-          formData._id || formData.id
-        }`,
-        {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(formData),
-        }
-      );
+      const token = localStorage.getItem("token");
+      const url = `${import.meta.env.VITE_API_URL}/api/clientes/${
+        formData._id || formData.id
+      }`;
+      const response = await fetch(url, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(formData),
+      });
       if (response.ok) {
         toast.success("Cliente atualizado com sucesso!");
         setModal(false);
@@ -88,7 +90,14 @@ const ListarClientes = () => {
     const handleConfirm = async () => {
       try {
         const url = `${import.meta.env.VITE_API_URL}/api/clientes/${id}`;
-        const response = await fetch(url, { method: "DELETE" });
+        const token = localStorage.getItem("token");
+        const response = await fetch(url, {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        });
         if (response.ok) {
           toast.success(`Sr(a) ${nome} deletado com sucesso!`);
           buscarClientes();
