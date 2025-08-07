@@ -26,14 +26,12 @@ const limiter = rateLimit({
 });
 
 // Middleares
-app.use(cors()); // Para permitir requisicoes de outras origens
-
-// CORS CONFIG CORRETA
 app.use(
   cors({
-    origin: "http://localhost:5173", // use a URL do seu frontend
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    origin: "*", // ou especifique os domínios em produção
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"],
     allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: true, // para aceitar cookies e headers com token
   })
 );
 
