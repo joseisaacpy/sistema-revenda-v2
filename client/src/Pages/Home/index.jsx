@@ -22,6 +22,7 @@ const Home = () => {
   const [quantidades, setQuantidades] = useState({
     clientes: 0,
     veiculos: 0,
+    vendas: 0,
   });
   // Função para carregar os dados
   useEffect(() => {
@@ -29,12 +30,12 @@ const Home = () => {
       try {
         const clientes = await fetchQuantidade("/api/clientes");
         const veiculos = await fetchQuantidade("/api/veiculos");
-        const vendas = await fetchQuantidade("/api/vendas");
+        // const vendas = await fetchQuantidade("/api/vendas");
         // Atualiza os estados
         setQuantidades({
           clientes,
           veiculos,
-          vendas,
+          // vendas,
         });
       } catch (error) {
         console.error("Erro ao buscar dados:", error);

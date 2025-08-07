@@ -46,7 +46,7 @@ app.get("/", (req, res) => {
 app.use("/api/auth", authRoutes);
 app.use("/api/clientes", clientesRoutes);
 app.use("/api/veiculos", veiculosRoutes);
-app.use("/api/vendas", vendasRoutes);
+// app.use("/api/vendas", vendasRoutes);
 
 // Inicia o servidor
 app.listen(port, "0.0.0.0", () => {

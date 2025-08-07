@@ -1,5 +1,9 @@
 // IMPORTS
 import jwt from "jsonwebtoken";
+import dotenv from "dotenv";
+// Configura o dotenv
+dotenv.config();
+
 const SECRET_KEY = process.env.SECRET_KEY;
 
 // MIDDLEWARE (será usudo nas rotas protegidas)
