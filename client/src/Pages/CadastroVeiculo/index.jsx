@@ -42,9 +42,12 @@ const CadastroVeiculos = () => {
     // Fazendo o envio dos dados
     try {
       const url = `${import.meta.env.VITE_API_URL}/api/veiculos`;
+      const token = localStorage.getItem("token");
+
       const res = await fetch(url, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
+        Authorization: `Bearer ${token}`,
         body: JSON.stringify(veiculo),
       });
 

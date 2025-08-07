@@ -72,9 +72,14 @@ const CadastroClientes = () => {
     // Começa a chamada assíncrona pra enviar os dados
     try {
       const url = `${import.meta.env.VITE_API_URL}/api/clientes`;
+      const token = localStorage.getItem("token");
+
       const res = await fetch(url, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
         body: JSON.stringify(formData),
       });
 
