@@ -188,8 +188,9 @@ router.get("/:id/recibo", verificarToken, async (req, res) => {
     if (!venda) {
       return res.status(404).json({ error: "Venda não encontrada." });
     }
-    // Configuração do PDF
-    const doc = new PDFDocument();
+
+    // Cria o PDF
+    const doc = new PDFDocument({ margin: 50 });
     res.setHeader("Content-Type", "application/pdf");
     res.setHeader(
       "Content-Disposition",
@@ -205,50 +206,104 @@ router.get("/:id/recibo", verificarToken, async (req, res) => {
       style: "currency",
       currency: "BRL",
     });
-    // Imagem logo do recibo ou título com nome da empresa
+
+    // Cabeçalho com nome da empresa e telefone
     doc.fontSize(35).text("SÓ CAMIONETES", { align: "center" });
-    doc.fontSize(25).text("(86)99986-7265", { align: "right" });
+    doc.fontSize(14).text("CNPJ: 25.286.227/0001-76", { align: "center" });
+    doc
+      .fontSize(14)
+      .text("Av. Barão de Gurguéia, 1180 - Vermelha - Teresina/PI", {
+        align: "center",
+      });
+    doc.fontSize(14).text("Telefone: (86) 99986-7265", { align: "center" });
+    doc.moveDown(2);
 
-    // Imagem no topo como header
-    // doc.image("../server/images/carro.jpeg", {
-    //   fit: [500, 200], // Largura e altura da imagem
-    //   align: "center", // Centralizada
-    //   valign: "top", // No topo
-    //   x: doc.page.margins.left, // Início respeitando margem esquerda
-    //   y: 30, // Distância do topo da página
-    // });
+    // Título do documento
+    doc.fontSize(20).text("RECIBO DE VENDA DE VEÍCULO", { align: "center" });
+    doc.moveDown(2);
+    // Dados do vendedor
+    doc
+      .fontSize(12)
+      .text(
+        `VENDEDOR: SÓ CAMIONETES LTDA, pessoa jurídica de direito privado, inscrita no CNPJ 25.286.227/0001-76, com sede em Teresina/PI, na Avenida Barão de Gurguéia, nº 1180, bairro Vermelha.`
+      );
 
-    // Espaço após a imagem
-    doc.moveDown(3); // Adiciona várias linhas em branco (~5 linhas de espaçamento)
+    doc.moveDown();
 
-    // Cabecalho
-    doc.fontSize(18).text("CONTRATO DE VENDA", { align: "left" });
-    doc.fontSize(18).text(`${valorFormatado}`, { align: "right" });
+    // Dados do comprador
+    doc.text(
+      `COMPRADOR: ${venda.clientes.nome}, inscrito no CPF/CNPJ sob o nº ${venda.clientes.cpf_cnpj}, residente em ${venda.clientes.endereco}, telefone ${venda.clientes.telefone}.`
+    );
+
+    doc.moveDown();
+
+    // Objeto
+    doc.fontSize(12).text("OBJETO:", { underline: true });
+    doc.text(`Marca: ${venda.veiculos.marca}`);
+    doc.text(`Modelo: ${venda.veiculos.modelo}`);
+    doc.text(`Ano Fab/Mod: ${venda.veiculos.ano_modelo}`);
+    doc.text(`Placa: ${venda.veiculos.placa}`);
+    doc.text(`Chassi: ${venda.veiculos.chassi}`);
+    doc.text(`Cor: ${venda.veiculos.cor}`);
+    doc.text(`Km: ${venda.veiculos.km}`);
+    doc.text(`Renavam: ${venda.veiculos.renavam}`);
+    doc.text(
+      `Data da venda: ${new Date(venda.data_venda).toLocaleDateString("pt-BR")}`
+    );
+    doc.moveDown();
+
+    // Forma de pagamento
+    doc.fontSize(12).text("FORMA DE PAGAMENTO:", { underline: true });
+    doc.text(`${venda.forma_pagamento}`);
+    doc.moveDown();
+
+    // Documentação
+    doc.fontSize(12).text("DOCUMENTAÇÃO:", { underline: true });
+    doc.text(`Dados da transferência: Aberto cliente`);
+    doc.moveDown();
+
+    // Observações
+    doc.fontSize(12).text("OBSERVAÇÕES:", { underline: true });
+    doc.text(`${venda.observacoes || "Nenhuma"}`);
+    doc.moveDown();
+
+    // Cláusulas
+    doc
+      .fontSize(12)
+      .text("CLÁUSULA PRIMEIRA – DA VISTORIA E AVALIAÇÃO DO VEÍCULO:", {
+        underline: true,
+      });
+    doc.text(
+      `O comprador declara ter vistoriado o veículo e concorda com seu estado de conservação no momento da compra.`
+    );
+
     doc.moveDown();
 
     doc
       .fontSize(12)
-      .text(
-        `Eu, ${venda.clientes.nome}, inscrito sob o CPF/CNPJ ${venda.clientes.cpf_cnpj},`
-      );
+      .text("CLÁUSULA SEGUNDA – DA RESPONSABILIDADE CIVIL E CRIMINAL:", {
+        underline: true,
+      });
     doc.text(
-      `declaro que adquiri o veículo ${venda.veiculos.modelo} / ${venda.veiculos.marca},`
+      `A partir da presente data, todas as responsabilidades civis e criminais relacionadas ao veículo passam a ser do comprador.`
     );
-    doc.text(
-      `placa ${venda.veiculos.placa}, ano/modelo ${venda.veiculos.ano_modelo}, cor ${venda.veiculos.cor},`
-    );
-    doc.text(`no valor de R$ ${parseFloat(venda.valor_venda).toFixed(2)},`);
-    doc.text(`pago via ${venda.forma_pagamento}, na data de ${dataFormatada}.`);
-    doc.moveDown();
-    doc.text(`Observações: ${venda.observacoes || "Nenhuma"}`);
-    doc.moveDown().moveDown();
 
-    doc.text("Assinatura do Vendedor: __________________________", {
-      align: "left",
+    doc.moveDown(2);
+
+    // Local e data
+    doc.text(`Teresina/PI, ${new Date().toLocaleDateString("pt-BR")}`, {
+      align: "right",
     });
-    doc.text("Assinatura do Comprador: _________________________", {
-      align: "left",
-    });
+    doc.moveDown(2);
+
+    // Assinaturas
+    doc.text(
+      "Assinatura do Vendedor: ____________________________________________________"
+    );
+    doc.moveDown();
+    doc.text(
+      "Assinatura do Comprador: __________________________________________________"
+    );
 
     doc.end();
   } catch (error) {
