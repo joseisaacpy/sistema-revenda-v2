@@ -16,6 +16,8 @@ const CadastroVeiculos = () => {
     km: "",
     valor_compra: "",
     data_compra: "",
+    fornecedor: "",
+    cpf_cnpj_fornecedor: "",
   });
 
   // Função pra lidar com o preenchimento do formulário
@@ -71,6 +73,8 @@ const CadastroVeiculos = () => {
           km: "",
           valor_compra: "",
           data_compra: "",
+          fornecedor: "",
+          cpf_cnpj_fornecedor: "",
         });
       } else {
         // Mostra uma mensagem de erro
@@ -241,6 +245,28 @@ const CadastroVeiculos = () => {
           value={formData.data_compra}
           onChange={handleChange}
           type="date"
+        />
+      </div>
+      <div className="flex flex-col">
+        <label htmlFor="fornecedor">Fornecedor:</label>
+        <input
+          className="border p-2 rounded-md"
+          id="fornecedor"
+          name="fornecedor"
+          value={formData.fornecedor}
+          onChange={handleChange}
+          type="text"
+        />
+      </div>
+      <div className="flex flex-col">
+        <label htmlFor="cpf_cnpj_fornecedor">CPF/CNPJ:</label>
+        <input
+          className="border p-2 rounded-md"
+          id="cpf_cnpj_fornecedor"
+          name="cpf_cnpj_fornecedor"
+          value={formData.cpf_cnpj_fornecedor}
+          onChange={handleChange}
+          type="text"
         />
       </div>
 

@@ -128,6 +128,7 @@ const ListarClientes = () => {
   async function buscarClientes() {
     const url = `${import.meta.env.VITE_API_URL}/api/clientes`;
     const token = localStorage.getItem("token");
+
     try {
       const response = await fetch(url, {
         method: "GET",

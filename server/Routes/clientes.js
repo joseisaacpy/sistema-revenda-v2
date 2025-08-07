@@ -2,7 +2,6 @@
 import express from "express";
 import { verificarToken } from "../middlewares/authMiddleware.js";
 import prisma from "../Lib/prisma.js";
-
 // CONSTANTES
 const router = express.Router();
 
@@ -70,17 +69,35 @@ router.post("/", verificarToken, async (req, res) => {
   }
 });
 
-// Read todos
-router.get("/", verificarToken, async (req, res) => {
+// Teste Get All
+router.get("/teste", async (req, res) => {
   try {
     const clientes = await prisma.clientes.findMany();
-    if (!clientes) {
+    if (clientes.length === 0) {
       return res.status(404).json({ error: "Nenhum cliente encontrado." });
     }
     res.json(clientes);
   } catch (error) {
     console.error("Erro ao buscar os clientes", error);
-    res.status(500).json({ error: "Erro ao buscar os clientes." });
+    res
+      .status(500)
+      .json({ error: "Erro ao buscar os clientes.", datails: error.message });
+  }
+});
+
+// Read todos
+router.get("/", verificarToken, async (req, res) => {
+  try {
+    const clientes = await prisma.clientes.findMany();
+    if (clientes.length === 0) {
+      return res.status(404).json({ error: "Nenhum cliente encontrado." });
+    }
+    res.json(clientes);
+  } catch (error) {
+    console.error("Erro ao buscar os clientes", error);
+    res
+      .status(500)
+      .json({ error: "Erro ao buscar os clientes.", datails: error.message });
   }
 });
 
