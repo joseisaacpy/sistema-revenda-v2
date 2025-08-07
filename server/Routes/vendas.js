@@ -9,18 +9,16 @@ const router = express.Router();
 
 // CREATE - Registrar uma nova venda
 router.post("/", verificarToken, async (req, res) => {
-  // Desestruturar os dados do corpo da requisição
   const {
     id_veiculo,
     id_cliente,
-    data_venda, // Virá do frontend em formato string 'YYYY-MM-DD'
+    data_venda,
     valor_venda,
     forma_pagamento,
     observacoes,
   } = req.body;
 
-  // --- 1. Validação Básica dos Dados Recebidos ---
-  // Verifica se todos os campos obrigatórios estão presentes
+  // Validação básica
   if (!id_veiculo || !id_cliente || !valor_venda || !forma_pagamento) {
     return res.status(400).json({
       error:
@@ -28,7 +26,6 @@ router.post("/", verificarToken, async (req, res) => {
     });
   }
 
-  // Validação de tipos (opcional, mas recomendado para segurança extra)
   if (
     typeof id_veiculo !== "number" ||
     typeof id_cliente !== "number" ||
@@ -39,134 +36,116 @@ router.post("/", verificarToken, async (req, res) => {
     });
   }
 
-  // Valida se o valor de venda é positivo
   if (parseFloat(valor_venda) <= 0) {
-    return res
-      .status(400)
-      .json({ error: "O valor da venda deve ser um número positivo." });
+    return res.status(400).json({
+      error: "O valor da venda deve ser um número positivo.",
+    });
   }
 
-  // Inicia uma transação de banco de dados
-  const client = await db.connect(); // Obtém um cliente do pool de conexões
   try {
-    await client.query("BEGIN"); // Inicia a transação
+    const novaVenda = await prisma.$transaction(async (tx) => {
+      // Verifica se o veículo existe
+      const veiculo = await tx.veiculos.findUnique({
+        where: { id: id_veiculo },
+      });
 
-    // --- 2. Verificar a Disponibilidade do Veículo ---
-    // Consulta o veículo e o bloqueia para evitar que outro processo o venda simultaneamente
-    const veiculoResult = await client.query(
-      "SELECT status FROM veiculos WHERE id = $1 FOR UPDATE",
-      [id_veiculo]
-    );
+      if (!veiculo) {
+        throw new Error("Veículo não encontrado.");
+      }
 
-    // Se o veículo não existe
-    if (veiculoResult.rows.length === 0) {
-      await client.query("ROLLBACK"); // Reverte a transação
-      return res.status(404).json({ error: "Veículo não encontrado." });
-    }
+      if (veiculo.status === "vendido") {
+        throw new Error("Este veículo já foi vendido.");
+      }
 
-    // Se o veículo já foi vendido
-    if (veiculoResult.rows[0].status === "vendido") {
-      await client.query("ROLLBACK"); // Reverte a transação
-      return res
-        .status(409)
-        .json({ error: "Este veículo já foi vendido e não está disponível." }); // 409 Conflict
-    }
+      // Verifica se o cliente existe
+      const cliente = await tx.clientes.findUnique({
+        where: { id: id_cliente },
+      });
 
-    // --- 3. Verificar se o Cliente Existe ---
-    // Embora o FOREIGN KEY ajude, uma verificação explícita antes pode dar uma mensagem melhor
-    const clienteResult = await client.query(
-      "SELECT id FROM clientes WHERE id = $1",
-      [id_cliente]
-    );
+      if (!cliente) {
+        throw new Error("Cliente não encontrado.");
+      }
 
-    if (clienteResult.rows.length === 0) {
-      await client.query("ROLLBACK"); // Reverte a transação
-      return res.status(404).json({ error: "Cliente não encontrado." });
-    }
+      // Cria a venda
+      const vendaCriada = await tx.vendas.create({
+        data: {
+          id_veiculo,
+          id_cliente,
+          data_venda: data_venda ? new Date(data_venda) : new Date(),
+          valor_venda: parseFloat(valor_venda),
+          forma_pagamento,
+          observacoes,
+        },
+      });
 
-    // --- 4. Registrar a Venda na Tabela 'vendas' ---
-    const insertVendaQuery = `
-      INSERT INTO vendas (id_veiculo, id_cliente, data_venda, valor_venda, forma_pagamento, observacoes)
-      VALUES ($1, $2, $3, $4, $5, $6)
-      RETURNING *; -- Retorna a linha inserida
-    `;
-    const vendaResult = await client.query(insertVendaQuery, [
-      id_veiculo,
-      id_cliente,
-      data_venda || new Date().toISOString().slice(0, 10), // Usa a data da requisição ou a data atual como fallback
-      parseFloat(valor_venda),
-      forma_pagamento,
-      observacoes,
-    ]);
+      // Atualiza status do veículo
+      await tx.veiculos.update({
+        where: { id: id_veiculo },
+        data: { status: "vendido" },
+      });
 
-    // --- 5. Atualizar o Status do Veículo para 'vendido' ---
-    const updateVeiculoQuery = `
-      UPDATE veiculos
-      SET status = 'vendido'
-      WHERE id = $1;
-    `;
-    await client.query(updateVeiculoQuery, [id_veiculo]);
+      return vendaCriada;
+    });
 
-    // --- 6. Confirmar a Transação ---
-    await client.query("COMMIT"); // Confirma todas as operações
-
-    // Resposta de sucesso
-    res.status(201).json({
+    return res.status(201).json({
       message: "Venda registrada com sucesso!",
-      venda: vendaResult.rows[0], // Retorna os dados da venda recém-criada
+      venda: novaVenda,
     });
   } catch (error) {
-    // Em caso de qualquer erro, reverte a transação
-    await client.query("ROLLBACK");
-    console.error("Erro ao registrar venda:", error);
-    // Retorna um erro genérico 500 para o cliente, logando o erro detalhado no servidor
-    res.status(500).json({
-      error:
-        "Erro interno do servidor ao registrar a venda. Por favor, tente novamente.",
+    console.error("Erro ao registrar venda:", error.message);
+    return res.status(500).json({
+      error: error.message || "Erro ao registrar a venda.",
     });
-  } finally {
-    // Libera o cliente de volta para o pool de conexões
-    client.release();
   }
 });
 
 // READ - Obter todas as vendas com detalhes de cliente e veículo
 router.get("/", verificarToken, async (req, res) => {
   try {
-    const query = `
-      SELECT
-          v.id,
-          v.data_venda,
-          v.valor_venda,
-          v.forma_pagamento,
-          v.observacoes,
-          c.nome AS cliente_nome,
-          c.cpf_cnpj AS cliente_cpf_cnpj,
-          ve.marca AS veiculo_marca,
-          ve.modelo AS veiculo_modelo,
-          ve.placa AS veiculo_placa,
-          ve.ano_modelo AS veiculo_ano_modelo,
-          ve.cor AS veiculo_cor
-      FROM
-          vendas v
-      JOIN
-          clientes c ON v.id_cliente = c.id
-      JOIN
-          veiculos ve ON v.id_veiculo = ve.id
-      ORDER BY
-          v.data_venda DESC, v.id DESC; -- Ordena pela data mais recente e depois pelo ID para consistência
-    `;
+    const vendas = await prisma.vendas.findMany({
+      orderBy: [{ data_venda: "desc" }, { id: "desc" }],
+      include: {
+        clientes: {
+          select: {
+            nome: true,
+            cpf_cnpj: true,
+          },
+        },
+        veiculos: {
+          select: {
+            marca: true,
+            modelo: true,
+            placa: true,
+            ano_modelo: true,
+            cor: true,
+          },
+        },
+      },
+    });
 
-    const result = await db.query(query);
-
-    if (result.rows.length === 0) {
+    // Verifica se há vendas
+    if (vendas.length === 0) {
       return res.status(404).json({ error: "Nenhuma venda encontrada." });
     }
+    // Cria um resultado formatado
+    const resultadoFormatado = vendas.map((v) => ({
+      id: v.id,
+      data_venda: v.data_venda,
+      valor_venda: v.valor_venda,
+      forma_pagamento: v.forma_pagamento,
+      observacoes: v.observacoes,
+      cliente_nome: v.clientes.nome,
+      cliente_cpf_cnpj: v.clientes.cpf_cnpj,
+      veiculo_marca: v.veiculos.marca,
+      veiculo_modelo: v.veiculos.modelo,
+      veiculo_placa: v.veiculos.placa,
+      veiculo_ano_modelo: v.veiculos.ano_modelo,
+      veiculo_cor: v.veiculos.cor,
+    }));
 
-    res.json(result.rows);
+    res.json(resultadoFormatado);
   } catch (error) {
-    console.error("Erro ao buscar as vendas:", error); // Adicionei o ":" para consistência
-    // Retorna um erro 500 para o cliente em caso de falha interna
+    console.error("Erro ao buscar as vendas:", error);
     res
       .status(500)
       .json({ error: "Erro interno do servidor ao buscar as vendas." });
@@ -193,7 +172,7 @@ router.get("/:id", verificarToken, async (req, res) => {
   }
 });
 
-//
+// GET Recibo
 router.get("/:id/recibo", verificarToken, async (req, res) => {
   try {
     const venda = await prisma.vendas.findUnique({
@@ -227,7 +206,7 @@ router.get("/:id/recibo", verificarToken, async (req, res) => {
       currency: "BRL",
     });
     // Imagem logo do recibo ou título com nome da empresa
-    doc.fontSize(35).text("SÓ CAMIONETES", { align: "center",  });
+    doc.fontSize(35).text("SÓ CAMIONETES", { align: "center" });
     doc.fontSize(25).text("(86)99986-7265", { align: "right" });
 
     // Imagem no topo como header

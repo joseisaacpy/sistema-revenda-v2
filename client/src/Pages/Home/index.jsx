@@ -22,6 +22,7 @@ const Home = () => {
   const [quantidades, setQuantidades] = useState({
     clientes: 0,
     veiculos: 0,
+    veiculosVendidos: 0,
     vendas: 0,
   });
   // Função para carregar os dados
@@ -30,12 +31,16 @@ const Home = () => {
       try {
         const clientes = await fetchQuantidade("/api/clientes");
         const veiculos = await fetchQuantidade("/api/veiculos");
-        // const vendas = await fetchQuantidade("/api/vendas");
+        const veiculosVendidos = await fetchQuantidade(
+          "/api/veiculos?status=vendido"
+        );
+        const vendas = await fetchQuantidade("/api/vendas");
         // Atualiza os estados
         setQuantidades({
           clientes,
           veiculos,
-          // vendas,
+          veiculosVendidos,
+          vendas,
         });
       } catch (error) {
         console.error("Erro ao buscar dados:", error);
@@ -58,6 +63,13 @@ const Home = () => {
         rota="veiculos"
         titulo="Veículos Cadastrados"
         quantidade={quantidades.veiculos || 0}
+        icon={<FaCarSide className="text-4xl" />}
+      />
+      {/* Veículos Vendidos */}
+      <CardInfo
+        rota="veiculos"
+        titulo="Veículos Vendidos"
+        quantidade={quantidades.veiculosVendidos || 0}
         icon={<FaCarSide className="text-4xl" />}
       />
       {/* Clientes Cadastrados */}

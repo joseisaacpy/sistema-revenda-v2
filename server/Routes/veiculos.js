@@ -118,9 +118,6 @@ router.get("/", verificarToken, async (req, res) => {
 
     const veiculos = await prisma.veiculos.findMany({
       where: filtro,
-      orderBy: {
-        id: "desc", // opcional: ordena por mais recente
-      },
     });
 
     if (veiculos.length === 0) {
