@@ -196,55 +196,6 @@ const EditClienteModal = ({
             onChange={handleChange}
             className="border p-2 rounded"
           />
-          <label htmlFor="cargo">Cargo</label>
-          <input
-            type="text"
-            name="cargo"
-            placeholder="Cargo"
-            value={formData.cargo}
-            onChange={handleChange}
-            className="border p-2 rounded"
-          />
-          <label htmlFor="nome_mae">Nome da Mãe</label>
-          <input
-            type="text"
-            name="nome_mae"
-            placeholder="Nome da Mãe"
-            value={formData.nome_mae}
-            onChange={handleChange}
-            className="border p-2 rounded"
-          />
-          <label htmlFor="nome_pai">Nome do pai</label>
-          <input
-            type="text"
-            name="nome_pai"
-            placeholder="Nome do Pai"
-            value={formData.nome_pai}
-            onChange={handleChange}
-            className="border p-2 rounded"
-          />
-          <label htmlFor="data_ultima_compra">Data Última Compra</label>
-          <input
-            type="date"
-            name="data_ultima_compra"
-            placeholder="Data Última Compra"
-            value={formData.data_ultima_compra}
-            onChange={handleChange}
-            className="border p-2 rounded"
-            readOnly
-          />
-          <label htmlFor="quantidade_veic_comprados">
-            Qtd. Veículos Comprados
-          </label>
-          <input
-            type="number"
-            name="quantidade_veic_comprados"
-            placeholder="Qtd. Veículos Comprados"
-            value={formData.quantidade_veic_comprados}
-            onChange={handleChange}
-            className="border p-2 rounded"
-            readOnly
-          />
         </div>
 
         <div className="text-right pt-4">
