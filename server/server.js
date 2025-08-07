@@ -26,8 +26,17 @@ const limiter = rateLimit({
 });
 
 // Middleares
-// app.use(cors()); // Para permitir requisicoes de outras origens
-app.use(cors());
+app.use(cors()); // Para permitir requisicoes de outras origens
+
+// CORS CONFIG CORRETA
+app.use(
+  cors({
+    origin: "http://localhost:5173", // use a URL do seu frontend
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  })
+);
+
 app.use(express.json()); // Para receber dados no formato JSON
 app.use(express.urlencoded({ extended: true })); // Para receber dados de formulários
 app.use(limiter); // Aplica em todas as rotas o limitador
