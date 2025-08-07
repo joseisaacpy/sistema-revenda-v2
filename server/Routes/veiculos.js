@@ -150,13 +150,17 @@ router.get("/", verificarToken, async (req, res) => {
 
 // READ (por ID)
 router.get("/:id", verificarToken, async (req, res) => {
-  const { id } = req.params;
   try {
-    const result = await db.query("SELECT * FROM veiculos WHERE id = $1", [id]);
-    if (result.rows.length === 0) {
+    const veiculo = await prisma.veiculos.findUnique({
+      where: {
+        id: Number(req.params.id),
+      },
+    });
+    // Validação de cliente
+    if (!veiculo) {
       return res.status(404).json({ error: "Veículo não encontrado." });
     }
-    res.json(result.rows[0]);
+    res.json(veiculo);
   } catch (error) {
     console.error("Erro ao buscar veículo:", error);
     res.status(500).json({ error: "Erro ao buscar veículo." });
@@ -218,14 +222,27 @@ router.put("/:id", async (req, res) => {
 
 // DELETE
 router.delete("/:id", verificarToken, async (req, res) => {
-  const { id } = req.params;
+  const id = Number(req.params.id);
+
+  // Verifica se o ID é válido
+  if (isNaN(id)) {
+    return res.status(400).json({ error: "ID inválido." });
+  }
 
   try {
-    const result = await db.query("DELETE FROM veiculos WHERE id = $1", [id]);
+    // Verifica se o veículo existe antes de deletar
+    const veiculo = await prisma.veiculos.findUnique({
+      where: { id },
+    });
 
-    if (result.rowCount === 0) {
+    if (!veiculo) {
       return res.status(404).json({ error: "Veículo não encontrado." });
     }
+
+    // Deleta o veículo
+    await prisma.veiculos.delete({
+      where: { id },
+    });
 
     res.json({ message: "Veículo deletado com sucesso." });
   } catch (error) {
@@ -233,5 +250,4 @@ router.delete("/:id", verificarToken, async (req, res) => {
     res.status(500).json({ error: "Erro ao deletar veículo." });
   }
 });
-
 export default router;

@@ -96,7 +96,6 @@ router.get("/:id", verificarToken, async (req, res) => {
       return res.status(404).json({ error: "Cliente não encontrado." });
     }
     res.json(cliente);
-    // Validação de cliente
   } catch (error) {
     console.error("Erro ao buscar o cliente", error);
     res.status(500).json({ error: "Erro ao buscar o cliente." });
@@ -157,27 +156,23 @@ router.put("/:id", async (req, res) => {
 // Delete
 router.delete("/:id", async (req, res) => {
   try {
-    const result = await prisma.clientes.delete({
-      where: {
-        id: Number(req.params.id),
-      },
-    });
-    // Validação de cliente
-    if (!result) {
-      return res.status(404).json({ error: "Cliente não encontrado." });
-    }
-    res.json({ message: "Cliente deletado com sucesso." });
-    // Validação de cliente
+    // Primeiro, verifica se o cliente existe
     const cliente = await prisma.clientes.findUnique({
       where: { id: Number(req.params.id) },
     });
+
     if (!cliente) {
-      return res.status(404).json({
-        error: "Cliente nao encontrado.",
-      });
+      return res.status(404).json({ error: "Cliente não encontrado." });
     }
+
+    // Se existir, deleta
+    await prisma.clientes.delete({
+      where: { id: Number(req.params.id) },
+    });
+
+    res.json({ message: "Cliente deletado com sucesso." });
   } catch (error) {
-    console.error("Erro ao deletar o cliente", error);
+    console.error("Erro ao deletar o cliente:", error);
     res.status(500).json({ error: "Erro ao deletar o cliente." });
   }
 });

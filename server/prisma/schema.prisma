@@ -1,71 +1,71 @@
-  generator client {
-    provider = "prisma-client-js"
-    output   = "../generated/prisma"
-  }
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
 
-  datasource db {
-    provider = "postgresql"
-    url      = env("DATABASE_PUBLIC_URL")
-  }
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_PUBLIC_URL")
+}
 
-  model clientes {
-    cpf_cnpj           String?  @db.VarChar
-    pessoa             String?  @db.VarChar(1)
-    sexo               String?  @db.VarChar(1)
-    nome               String?
-    telefone_celular   String?  @db.VarChar
-    telefone_comercial String?  @db.VarChar
-    rg                 String?  @db.VarChar
-    ie                 String?  @db.VarChar
-    data_nascimento    String?
-    data_cadastro      String?
-    email              String?  @db.VarChar
-    cep                String?  @db.VarChar
-    rua                String?
-    numero             String?  @db.VarChar
-    bairro             String?  @db.VarChar
-    estado             String?  @db.VarChar
-    cidade             String?  @db.VarChar
-    complemento        String?
-    id                 Int      @id(map: "clientes_nova_pkey") @default(autoincrement())
-    vendas             vendas[]
-  }
+model clientes {
+  cpf_cnpj           String?   @db.VarChar
+  pessoa             String?   @db.VarChar(1)
+  sexo               String?   @db.VarChar(1)
+  nome               String?
+  telefone_celular   String?   @db.VarChar
+  telefone_comercial String?   @db.VarChar
+  rg                 String?   @db.VarChar
+  ie                 String?   @db.VarChar
+  data_nascimento    DateTime?
+  data_cadastro      DateTime?
+  email              String?   @db.VarChar
+  cep                String?   @db.VarChar
+  rua                String?
+  numero             String?   @db.VarChar
+  bairro             String?   @db.VarChar
+  estado             String?   @db.VarChar
+  cidade             String?   @db.VarChar
+  complemento        String?
+  id                 Int       @id(map: "clientes_nova_pkey") @default(autoincrement())
+  vendas             vendas[]
+}
 
-  model usuarios {
-    id    Int    @id @default(autoincrement())
-    nome  String
-    email String @unique
-    senha String
-  }
+model usuarios {
+  id    Int    @id @default(autoincrement())
+  nome  String
+  email String @unique
+  senha String
+}
 
-  /// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
-  model veiculos {
-    chassi              String?   @unique(map: "veiculos_estoque_chassi_key") @db.VarChar(30)
-    renavam             String?   @unique(map: "veiculos_estoque_renavan_key") @db.VarChar(30)
-    placa               String?   @unique(map: "veiculos_estoque_placa_key") @db.VarChar(10)
-    marca               String?   @db.VarChar(100)
-    modelo              String?   @db.VarChar(100)
-    ano_modelo          Int?
-    combustivel         String?   @db.VarChar(20)
-    cor                 String?   @db.VarChar(20)
-    km                  Int?
-    valor_compra        Decimal?  @db.Decimal(10, 2)
-    data_compra         DateTime? @db.Date
-    fornecedor          String?   @db.VarChar(100)
-    cpf_cnpj_fornecedor String?   @db.VarChar(20)
-    id                  Int       @id(map: "veiculos_estoque_pkey") @default(autoincrement())
-    status              String?   @default("estoque") @db.VarChar(20)
-    vendas              vendas[]
-  }
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model veiculos {
+  chassi              String?   @unique(map: "veiculos_estoque_chassi_key") @db.VarChar(30)
+  renavam             String?   @unique(map: "veiculos_estoque_renavan_key") @db.VarChar(30)
+  placa               String?   @unique(map: "veiculos_estoque_placa_key") @db.VarChar(10)
+  marca               String?   @db.VarChar(100)
+  modelo              String?   @db.VarChar(100)
+  ano_modelo          Int?
+  combustivel         String?   @db.VarChar(20)
+  cor                 String?   @db.VarChar(20)
+  km                  Int?
+  valor_compra        Decimal?  @db.Decimal(10, 2)
+  data_compra         DateTime? @db.Date
+  fornecedor          String?   @db.VarChar(100)
+  cpf_cnpj_fornecedor String?   @db.VarChar(20)
+  id                  Int       @id(map: "veiculos_estoque_pkey") @default(autoincrement())
+  status              String?   @default("estoque") @db.VarChar(20)
+  vendas              vendas[]
+}
 
-  model vendas {
-    id              Int       @id @default(autoincrement())
-    id_veiculo      Int
-    id_cliente      Int
-    data_venda      DateTime? @default(dbgenerated("CURRENT_DATE")) @db.Date
-    valor_venda     Decimal   @db.Decimal(10, 2)
-    forma_pagamento String    @db.VarChar(50)
-    observacoes     String?   @db.VarChar(255)
-    clientes        clientes  @relation(fields: [id_cliente], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_cliente")
-    veiculos        veiculos  @relation(fields: [id_veiculo], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_veiculo")
-  }
+model vendas {
+  id              Int       @id @default(autoincrement())
+  id_veiculo      Int
+  id_cliente      Int
+  data_venda      DateTime? @default(dbgenerated("CURRENT_DATE")) @db.Date
+  valor_venda     Decimal   @db.Decimal(10, 2)
+  forma_pagamento String    @db.VarChar(50)
+  observacoes     String?   @db.VarChar(255)
+  clientes        clientes  @relation(fields: [id_cliente], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_cliente")
+  veiculos        veiculos  @relation(fields: [id_veiculo], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_veiculo")
+}
