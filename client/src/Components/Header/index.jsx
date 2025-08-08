@@ -3,7 +3,8 @@ import { useState, useEffect } from "react";
 
 // Link para navegação
 import { Link } from "react-router-dom";
-
+// Importa logo
+import logo from "../../Assets/Images/logo-so-camionetes-removebg.png";
 // Ícones
 import {
   FaHome,
@@ -43,8 +44,9 @@ const Header = () => {
           to="/"
           className="flex items-center gap-2  hover:text-yellow-400 transition-all duration-300"
         >
-          <FaTruckPickup className="text-4xl" />
-          <h1 className="hidden md:block text-2xl font-bold">Só Camionetes</h1>
+          <img src={logo} className="w-50" alt="" srcset="" />
+          {/* <FaTruckPickup className="text-4xl" />
+          <h1 className="hidden md:block text-2xl font-bold">Só Camionetes</h1> */}
         </Link>
 
         {/* Button menu burguer mobile */}
