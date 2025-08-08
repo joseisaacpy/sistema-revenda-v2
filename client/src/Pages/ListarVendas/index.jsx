@@ -52,6 +52,7 @@ const ListarVendas = () => {
 
   // Função pra lidar com o Download do recibo
   const handleDownloadPDF = async (vendaId) => {
+    const toastId = toast.loading("Gerando recibo...");
     try {
       const token = localStorage.getItem("token");
       const apiUrl = `${
@@ -80,9 +81,22 @@ const ListarVendas = () => {
 
       // Limpa o objeto depois de um tempo
       setTimeout(() => window.URL.revokeObjectURL(url), 1000);
+      // Atualiza a notificação
+      toast.update(toastId, {
+        render: "Recibo gerado com sucesso!",
+        type: "success",
+        isLoading: false,
+        autoClose: 3000,
+      });
     } catch (error) {
       console.error("Erro ao baixar o recibo:", error);
-      alert("Erro ao gerar recibo em PDF");
+      // Atualiza a notificação
+      toast.update(toastId, {
+        render: "Erro ao gerar o recibo.",
+        type: "error",
+        isLoading: false,
+        autoClose: 3000,
+      });
     }
   };
 
