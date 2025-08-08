@@ -109,6 +109,13 @@ router.get("/", verificarToken, async (req, res) => {
           select: {
             nome: true,
             cpf_cnpj: true,
+            telefone_celular: true,
+            cidade: true,
+            bairro: true,
+            rua: true,
+            numero: true,
+            cep: true,
+            estado: true,
           },
         },
         veiculos: {
@@ -232,7 +239,15 @@ router.get("/:id/recibo", verificarToken, async (req, res) => {
 
     // Dados do comprador
     doc.text(
-      `COMPRADOR: ${venda.clientes.nome}, inscrito no CPF/CNPJ sob o nº ${venda.clientes.cpf_cnpj}, residente em ${venda.clientes.endereco}, telefone ${venda.clientes.telefone}.`
+      `COMPRADOR: ${venda.clientes.nome}, inscrito no CPF/CNPJ sob o nº ${
+        venda.clientes.cpf_cnpj
+      }, com endereço em ${venda.clientes.cidade}/${
+        venda.clientes.estado
+      }, na RUA ${venda.clientes.rua} nº ${venda.clientes.numero}, bairro ${
+        venda.clientes.bairro
+      }, CEP ${venda.clientes.cep}, telefone ${
+        venda.clientes.telefone_celular || venda.clientes.telefone_comercial
+      }.`
     );
 
     doc.moveDown();
