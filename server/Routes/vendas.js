@@ -3,6 +3,10 @@ import express from "express";
 import { verificarToken } from "../middlewares/authMiddleware.js";
 import prisma from "../Lib/prisma.js";
 import PDFDocument from "pdfkit";
+import path from "path";
+import { fileURLToPath } from "url";
+import { dirname } from "path";
+const __dirname = dirname(fileURLToPath(import.meta.url));
 
 // CONSTANTES
 const router = express.Router();
@@ -214,19 +218,19 @@ router.get("/:id/recibo", verificarToken, async (req, res) => {
       currency: "BRL",
     });
 
-    // Cabeçalho com nome da empresa e telefone
-    doc.fontSize(35).text("SÓ CAMIONETES", { align: "center" });
-    doc.fontSize(14).text("CNPJ: 25.286.227/0001-76", { align: "center" });
-    doc
-      .fontSize(14)
-      .text("Av. Barão de Gurguéia, 1180 - Vermelha - Teresina/PI", {
-        align: "center",
-      });
-    doc.fontSize(14).text("Telefone: (86) 99986-7265", { align: "center" });
+    // Cabeçalho com logo
+    // Caminho da imagem
+    const logoPath = path.join(__dirname, "../Images/logo-so-camionetes.jpg");
+    doc.image(logoPath, {
+      fit: [550, 550],
+      align: "center",
+    });
+    doc.fontSize(18).text("(86) 99986-7265", { align: "right" });
     doc.moveDown(2);
 
     // Título do documento
-    doc.fontSize(20).text("RECIBO DE VENDA DE VEÍCULO", { align: "center" });
+    doc.fontSize(18).text(`${valorFormatado}`, { align: "right" });
+    doc.fontSize(20).text("RECIBO DE VENDA", { align: "center" });
     doc.moveDown(2);
     // Dados do vendedor
     doc
@@ -252,7 +256,7 @@ router.get("/:id/recibo", verificarToken, async (req, res) => {
 
     doc.moveDown();
 
-    // Objeto
+    // Dados do veiculo
     doc.fontSize(12).text("OBJETO:", { underline: true });
     doc.text(`Marca: ${venda.veiculos.marca}`);
     doc.text(`Modelo: ${venda.veiculos.modelo}`);
@@ -293,7 +297,6 @@ router.get("/:id/recibo", verificarToken, async (req, res) => {
     );
 
     doc.moveDown();
-
     doc
       .fontSize(12)
       .text("CLÁUSULA SEGUNDA – DA RESPONSABILIDADE CIVIL E CRIMINAL:", {
@@ -309,16 +312,29 @@ router.get("/:id/recibo", verificarToken, async (req, res) => {
     doc.text(`Teresina/PI, ${new Date().toLocaleDateString("pt-BR")}`, {
       align: "right",
     });
+
     doc.moveDown(2);
 
     // Assinaturas
-    doc.text(
-      "Assinatura do Vendedor: ____________________________________________________"
-    );
+    // Parte do comprador (canto esquerdo)
     doc.moveDown();
     doc.text(
-      "Assinatura do Comprador: __________________________________________________"
+      "_______________________________________________________________",
+      {
+        align: "left",
+      }
     );
+    doc.text(
+      "_______________________________________________________________",
+      {
+        align: "left",
+      }
+    );
+    doc.text(`${venda.clientes.nome}`, { align: "left" });
+    doc.text(`${venda.clientes.cpf_cnpj}`, { align: "left" });
+    // Parte do vendedor (canto direito)
+    doc.text("Só Camionetes", { align: "right" });
+    doc.text("25.286.227/0001-76", { align: "right" });
 
     doc.end();
   } catch (error) {
