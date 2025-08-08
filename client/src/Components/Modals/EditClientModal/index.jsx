@@ -114,16 +114,6 @@ const EditClienteModal = ({
             onChange={handleChange}
             className="border p-2 rounded"
           />
-          <label htmlFor="data_cadastro">Data de Cadastro</label>
-          <input
-            type="date"
-            name="data_cadastro"
-            placeholder="Data de Cadastro"
-            value={formData.data_cadastro}
-            onChange={handleChange}
-            className="border p-2 rounded"
-            readOnly
-          />
           <label htmlFor="email">Email</label>
           <input
             type="email"

@@ -9,25 +9,24 @@ datasource db {
 }
 
 model clientes {
-  cpf_cnpj           String?   @db.VarChar
-  pessoa             String?   @db.VarChar(1)
-  sexo               String?   @db.VarChar(1)
+  cpf_cnpj           String?  @db.VarChar
+  pessoa             String?  @db.VarChar(1)
+  sexo               String?  @db.VarChar(1)
   nome               String?
-  telefone_celular   String?   @db.VarChar
-  telefone_comercial String?   @db.VarChar
-  rg                 String?   @db.VarChar
-  ie                 String?   @db.VarChar
-  data_nascimento    DateTime?
-  data_cadastro      DateTime?
-  email              String?   @db.VarChar
-  cep                String?   @db.VarChar
+  telefone_celular   String?  @db.VarChar
+  telefone_comercial String?  @db.VarChar
+  rg                 String?  @db.VarChar
+  ie                 String?  @db.VarChar
+  data_nascimento    String?
+  email              String?  @db.VarChar
+  cep                String?  @db.VarChar
   rua                String?
-  numero             String?   @db.VarChar
-  bairro             String?   @db.VarChar
-  estado             String?   @db.VarChar
-  cidade             String?   @db.VarChar
+  numero             String?  @db.VarChar
+  bairro             String?  @db.VarChar
+  estado             String?  @db.VarChar
+  cidade             String?  @db.VarChar
   complemento        String?
-  id                 Int       @id(map: "clientes_nova_pkey") @default(autoincrement())
+  id                 Int      @id(map: "clientes_nova_pkey") @default(autoincrement())
   vendas             vendas[]
 }
 

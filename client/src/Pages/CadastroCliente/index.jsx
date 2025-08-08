@@ -14,7 +14,6 @@ const CadastroClientes = () => {
     rg: "",
     ie: "",
     data_nascimento: "",
-    data_cadastro: new Date().toISOString().slice(0, 10),
     email: "",
     cep: "",
     rua: "",
@@ -97,7 +96,6 @@ const CadastroClientes = () => {
           rg: "",
           ie: "",
           data_nascimento: "",
-          data_cadastro: new Date().toISOString().slice(0, 10), // Reinicia com a data atual
           email: "",
           cep: "",
           rua: "",
@@ -256,18 +254,6 @@ const CadastroClientes = () => {
           id="data_nascimento"
           name="data_nascimento"
           value={formData.data_nascimento}
-          type="date"
-          onChange={handleChange}
-        />
-      </div>
-
-      <div className="flex flex-col">
-        <label htmlFor="data_cadastro">Data de Cadastro:</label>
-        <input
-          className="border p-2 rounded-md"
-          id="data_cadastro"
-          name="data_cadastro"
-          value={formData.data_cadastro}
           type="date"
           onChange={handleChange}
         />
