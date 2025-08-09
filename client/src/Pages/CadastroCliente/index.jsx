@@ -1,122 +1,46 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 // Para notificações
 import { ToastContainer, toast } from "react-toastify";
+// Para validação de formulários
+import clienteSchema from "../../Validators/clienteSchema";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 
-const CadastroClientes = () => {
-  // Estado para armazenar os dados (todos os campos iniciam vazios)
-  const [formData, setFormData] = useState({
-    cpf_cnpj: "",
-    pessoa: "",
-    sexo: "",
-    nome: "",
-    telefone_celular: "",
-    telefone_comercial: "",
-    rg: "",
-    ie: "",
-    data_nascimento: "",
-    email: "",
-    cep: "",
-    rua: "",
-    numero: "",
-    bairro: "",
-    estado: "",
-    cidade: "",
-    complemento: "",
-  });
+export const CadastroCliente = () => {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({ resolver: zodResolver(clienteSchema) });
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
-  };
-
-  // Estado pra armazenar os erros
-  const [errors, setErrors] = useState({});
-
-  // Função para validar o formulário
-  const validateForm = () => {
-    // Objeto para armazenar os erros
-    const newErrors = {};
-
-    // Campos obrigatórios
-    if (!formData.nome?.trim()) {
-      newErrors.nome = "Nome é obrigatório";
-    }
-
-    if (!formData.cpf_cnpj?.trim()) {
-      newErrors.cpf_cnpj = "CPF/CNPJ é obrigatório";
-    }
-
-    // Validação de email
-    if (formData.email && !/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = "Email inválido";
-    }
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-
-  // Função pra lidar com o envio do formulário
-  const handleSubmit = async (e) => {
-    e.preventDefault(); // Impede o envio do formulário
-
-    // Valida o formulário
-    if (!validateForm()) {
-      toast.error("Corrija os erros e tente novamente!");
-      return;
-    }
-
-    // Começa a chamada assíncrona pra enviar os dados
+  // Função para lidar com o envio do formulário
+  const onSubmit = async (data) => {
     try {
       const url = `${import.meta.env.VITE_API_URL}/api/clientes`;
       const token = localStorage.getItem("token");
-
-      const res = await fetch(url, {
+      const response = await fetch(url, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(data),
       });
 
-      if (res.ok) {
-        // Mostra uma mensagem de sucesso
-        toast.success("Cliente cadastrado com sucesso!");
-        // Limpa o formulário
-        setFormData({
-          cpf_cnpj: "",
-          pessoa: "",
-          sexo: "",
-          nome: "",
-          telefone_celular: "",
-          telefone_comercial: "",
-          rg: "",
-          ie: "",
-          data_nascimento: "",
-          email: "",
-          cep: "",
-          rua: "",
-          numero: "",
-          bairro: "",
-          estado: "",
-          cidade: "",
-          complemento: "",
-        });
-        // Limpa os erros
-        setErrors({});
-      } else {
-        const errorData = await res.json();
-        // Mostra uma mensagem de erro
-        toast.error(errorData.message || "Erro ao cadastrar cliente!");
+      if (!response.ok) {
+        throw new Error("Erro ao cadastrar cliente");
       }
+      const result = await response.json();
+      console.log("Cliente cadastrado com sucesso:", result);
+      toast.success("Cadastro realizado com sucesso!");
+      // Limpa o formulário
+      document.getElementById("pessoaForm").reset();
     } catch (error) {
-      toast.error("Erro de conexão. Tente novamente.");
-      console.error("Erro ao enviar os dados:", error);
+      toast.error("Erro ao cadastrar cliente!");
+      console.error(error);
     }
   };
+
   // useEffect para mudar o title
   useEffect(() => {
     document.title = "Cadastro de Clientes";
@@ -124,7 +48,7 @@ const CadastroClientes = () => {
 
   return (
     <form
-      onSubmit={handleSubmit}
+      onSubmit={handleSubmit(onSubmit)}
       className="space-y-4 flex flex-col gap-4 border border-gray-300 p-4 rounded-lg bg-blue-50"
       id="pessoaForm"
     >
@@ -135,15 +59,11 @@ const CadastroClientes = () => {
         <input
           className="border p-2 rounded-md"
           id="cpf_cnpj"
-          name="cpf_cnpj"
-          value={formData.cpf_cnpj}
-          minLength={11}
-          maxLength={18}
+          {...register("cpf_cnpj")}
           placeholder="Digite o CPF ou CNPJ"
-          onChange={handleChange}
         />
         {errors.cpf_cnpj && (
-          <p className="text-red-600 text-sm">{errors.cpf_cnpj}</p>
+          <p className="text-red-600 text-sm">{errors.cpf_cnpj.message}</p>
         )}
       </div>
 
@@ -152,14 +72,15 @@ const CadastroClientes = () => {
         <select
           className="border p-2 rounded-md"
           id="pessoa"
-          name="pessoa"
-          value={formData.pessoa}
-          onChange={handleChange}
+          {...register("pessoa")}
         >
           <option value="">Selecione</option>
           <option value="F">Física</option>
           <option value="J">Jurídica</option>
         </select>
+        {errors.pessoa && (
+          <p className="text-red-600 text-sm">{errors.pessoa.message}</p>
+        )}
       </div>
 
       <div className="flex flex-col">
@@ -167,15 +88,16 @@ const CadastroClientes = () => {
         <select
           className="border p-2 rounded-md"
           id="sexo"
-          name="sexo"
-          value={formData.sexo}
-          onChange={handleChange}
+          {...register("sexo")}
         >
           <option value="">Selecione</option>
           <option value="M">Masculino</option>
           <option value="F">Feminino</option>
-          <option value="Outro">Outro</option>
+          <option value="O">Outro</option>
         </select>
+        {errors.sexo && (
+          <p className="text-red-600 text-sm">{errors.sexo.message}</p>
+        )}
       </div>
 
       <div className="flex flex-col">
@@ -184,11 +106,12 @@ const CadastroClientes = () => {
           className="border p-2 rounded-md"
           id="nome"
           name="nome"
-          value={formData.nome}
-          onChange={handleChange}
+          {...register("nome")}
           placeholder="Digite o nome completo"
         />
-        {errors.nome && <p className="text-red-600 text-sm">{errors.nome}</p>}
+        {errors.nome && (
+          <p className="text-red-600 text-sm">{errors.nome.message}</p>
+        )}
       </div>
 
       <div className="flex flex-col">
@@ -197,12 +120,14 @@ const CadastroClientes = () => {
           className="border p-2 rounded-md"
           id="telefone_celular"
           name="telefone_celular"
-          value={formData.telefone_celular}
-          minLength={10}
-          maxLength={15}
+          {...register("telefone_celular")}
           placeholder="(xx) xxxxx-xxxx"
-          onChange={handleChange}
         />
+        {errors.telefone_celular && (
+          <p className="text-red-600 text-sm">
+            {errors.telefone_celular.message}
+          </p>
+        )}
       </div>
 
       <div className="flex flex-col">
@@ -210,13 +135,14 @@ const CadastroClientes = () => {
         <input
           className="border p-2 rounded-md"
           id="telefone_comercial"
-          name="telefone_comercial"
-          value={formData.telefone_comercial}
-          minLength={10}
-          maxLength={15}
+          {...register("telefone_comercial")}
           placeholder="(xx) xxxxx-xxxx"
-          onChange={handleChange}
         />
+        {errors.telefone_comercial && (
+          <p className="text-red-600 text-sm">
+            {errors.telefone_comercial.message}
+          </p>
+        )}
       </div>
 
       <div className="flex flex-col">
@@ -224,13 +150,12 @@ const CadastroClientes = () => {
         <input
           className="border p-2 rounded-md"
           id="rg"
-          name="rg"
-          value={formData.rg}
-          minLength={5}
-          maxLength={20}
+          {...register("rg")}
           placeholder="Digite o RG"
-          onChange={handleChange}
         />
+        {errors.rg && (
+          <p className="text-red-600 text-sm">{errors.rg.message}</p>
+        )}
       </div>
 
       <div className="flex flex-col">
@@ -238,13 +163,12 @@ const CadastroClientes = () => {
         <input
           className="border p-2 rounded-md"
           id="ie"
-          name="ie"
-          value={formData.ie}
-          minLength={5}
-          maxLength={20}
+          {...register("ie")}
           placeholder="Digite a IE"
-          onChange={handleChange}
         />
+        {errors.ie && (
+          <p className="text-red-600 text-sm">{errors.ie.message}</p>
+        )}
       </div>
 
       <div className="flex flex-col">
@@ -252,11 +176,14 @@ const CadastroClientes = () => {
         <input
           className="border p-2 rounded-md"
           id="data_nascimento"
-          name="data_nascimento"
-          value={formData.data_nascimento}
+          {...register("data_nascimento")}
           type="date"
-          onChange={handleChange}
         />
+        {errors.data_nascimento && (
+          <p className="text-red-600 text-sm">
+            {errors.data_nascimento.message}
+          </p>
+        )}
       </div>
 
       <div className="flex flex-col">
@@ -264,13 +191,13 @@ const CadastroClientes = () => {
         <input
           className="border p-2 rounded-md"
           id="email"
-          name="email"
-          value={formData.email}
-          onChange={handleChange}
+          {...register("email")}
           type="email"
           placeholder="Digite o email"
         />
-        {errors.email && <p className="text-red-600 text-sm">{errors.email}</p>}
+        {errors.email && (
+          <p className="text-red-600 text-sm">{errors.email.message}</p>
+        )}
       </div>
 
       <div className="flex flex-col">
@@ -279,12 +206,12 @@ const CadastroClientes = () => {
           className="border p-2 rounded-md"
           id="cep"
           name="cep"
-          value={formData.cep}
-          minLength={8}
-          maxLength={9}
+          {...register("cep")}
           placeholder="Digite o CEP"
-          onChange={handleChange}
         />
+        {errors.cep && (
+          <p className="text-red-600 text-sm">{errors.cep.message}</p>
+        )}
       </div>
 
       <div className="flex flex-col">
@@ -292,11 +219,12 @@ const CadastroClientes = () => {
         <input
           className="border p-2 rounded-md"
           id="rua"
-          name="rua"
-          value={formData.rua}
+          {...register("rua")}
           placeholder="Digite a rua"
-          onChange={handleChange}
         />
+        {errors.rua && (
+          <p className="text-red-600 text-sm">{errors.rua.message}</p>
+        )}
       </div>
 
       <div className="flex flex-col">
@@ -304,14 +232,13 @@ const CadastroClientes = () => {
         <input
           className="border p-2 rounded-md"
           id="numero"
-          name="numero"
-          value={formData.numero}
-          minLength={1}
-          maxLength={10}
-          type="number"
+          type="text"
+          {...register("numero")}
           placeholder="Digite o número da casa"
-          onChange={handleChange}
         />
+        {errors.numero && (
+          <p className="text-red-600 text-sm">{errors.numero.message}</p>
+        )}
       </div>
 
       <div className="flex flex-col">
@@ -319,11 +246,12 @@ const CadastroClientes = () => {
         <input
           className="border p-2 rounded-md"
           id="bairro"
-          name="bairro"
-          value={formData.bairro}
+          {...register("bairro")}
           placeholder="Digite o bairro"
-          onChange={handleChange}
         />
+        {errors.bairro && (
+          <p className="text-red-600 text-sm">{errors.bairro.message}</p>
+        )}
       </div>
 
       <div className="flex flex-col">
@@ -331,9 +259,7 @@ const CadastroClientes = () => {
         <select
           className="border p-2 rounded-md"
           id="estado"
-          name="estado"
-          value={formData.estado}
-          onChange={handleChange}
+          {...register("estado")}
         >
           <option value="">Selecione o estado</option>
           <option value="AC">AC</option>
@@ -364,6 +290,9 @@ const CadastroClientes = () => {
           <option value="SE">SE</option>
           <option value="TO">TO</option>
         </select>
+        {errors.estado && (
+          <p className="text-red-600 text-sm">{errors.estado.message}</p>
+        )}
       </div>
 
       <div className="flex flex-col">
@@ -371,11 +300,12 @@ const CadastroClientes = () => {
         <input
           className="border p-2 rounded-md"
           id="cidade"
-          name="cidade"
-          value={formData.cidade}
+          {...register("cidade")}
           placeholder="Digite a cidade"
-          onChange={handleChange}
         />
+        {errors.cidade && (
+          <p className="text-red-600 text-sm">{errors.cidade.message}</p>
+        )}
       </div>
 
       <div className="flex flex-col">
@@ -383,11 +313,12 @@ const CadastroClientes = () => {
         <input
           className="border p-2 rounded-md"
           id="complemento"
-          name="complemento"
-          value={formData.complemento}
-          onChange={handleChange}
+          {...register("complemento")}
           placeholder="Digite o complemento"
         />
+        {errors.complemento && (
+          <p className="text-red-600 text-sm">{errors.complemento.message}</p>
+        )}
       </div>
 
       <button
@@ -413,4 +344,4 @@ const CadastroClientes = () => {
   );
 };
 
-export default CadastroClientes;
+export default CadastroCliente;
