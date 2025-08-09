@@ -18,8 +18,15 @@ const ListarVeiculos = () => {
   async function deletarVeiculo(id) {
     const handleConfirm = async () => {
       try {
+        const token = localStorage.getItem("token");
         const url = `${import.meta.env.VITE_API_URL}/api/veiculos/${id}`;
-        const response = await fetch(url, { method: "DELETE" });
+        const response = await fetch(url, {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        });
         if (response.ok) {
           toast.success(`Veiculo deletado com sucesso!`);
           buscarVeiculos();
@@ -49,7 +56,6 @@ const ListarVeiculos = () => {
   // Buscar todos os clientes
   async function buscarVeiculos() {
     const token = localStorage.getItem("token");
-
     const url = `${import.meta.env.VITE_API_URL}/api/veiculos`;
     try {
       const response = await fetch(url, {
