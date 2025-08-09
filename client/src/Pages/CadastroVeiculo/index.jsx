@@ -1,90 +1,45 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 // Para notificações
 import { ToastContainer, toast } from "react-toastify";
+// Para validação de formulários
+import veiculoSchema from "../../Validators/veiculoSchema";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 
-const CadastroVeiculos = () => {
-  // Dados do formulário
-  const [formData, setFormData] = useState({
-    modelo: "",
-    marca: "",
-    chassi: "",
-    renavam: "",
-    placa: "",
-    ano_modelo: "",
-    cor: "",
-    combustivel: "",
-    km: "",
-    valor_compra: "",
-    data_compra: "",
-    fornecedor: "",
-    cpf_cnpj_fornecedor: "",
-  });
-
-  // Função pra lidar com o preenchimento do formulário
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
-  };
+const CadastroVeiculo = () => {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({ resolver: zodResolver(veiculoSchema) });
 
   // Função pra lidar com o envio do formulário
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    // Adiciona os dados enviados numa variável, mas com uma pequena modificação dos tipos
-    const veiculo = {
-      ...formData,
-      ano_modelo: parseInt(formData.ano_modelo),
-      km: parseInt(formData.km),
-      valor_compra: parseFloat(formData.valor_compra),
-    };
-
-    // Fazendo o envio dos dados
+  const onSubmit = async (data) => {
     try {
       const url = `${import.meta.env.VITE_API_URL}/api/veiculos`;
       const token = localStorage.getItem("token");
 
-      const res = await fetch(url, {
+      const response = await fetch(url, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify(veiculo),
+        body: JSON.stringify(data),
       });
 
-      const data = await res.json();
-
-      if (res.ok) {
-        // Mostra uma mensagem de sucesso
-        toast.success("Carro cadastrado com sucesso!");
-        // Limpa o formulário
-        setFormData({
-          modelo: "",
-          marca: "",
-          chassi: "",
-          renavam: "",
-          placa: "",
-          ano_modelo: "",
-          cor: "",
-          combustivel: "",
-          km: "",
-          valor_compra: "",
-          data_compra: "",
-          fornecedor: "",
-          cpf_cnpj_fornecedor: "",
-        });
-      } else {
-        // Mostra uma mensagem de erro
-        toast.error("Erro ao cadastrar carro!");
-        console.error("Erro ao cadastrar carro:", data);
+      if (!response.ok) {
+        throw new Error("Erro ao cadastrar veículo.");
       }
+      const result = await response.json();
+      console.log("Veículo cadastrado com sucesso:", result);
+      toast.success("Cadastro realizado com sucesso!");
+      // Limpa o formulário
+      document.getElementById("veiculoForm").reset();
     } catch (error) {
       // Mostra uma mensagem de erro
-      toast.error("Erro ao cadastrar carro!");
-      console.error("Erro ao cadastrar carro:", error);
+      toast.error("Erro ao cadastrar veículo!");
+      console.error("Erro ao cadastrar veículo:", error);
     }
   };
 
@@ -95,7 +50,7 @@ const CadastroVeiculos = () => {
 
   return (
     <form
-      onSubmit={handleSubmit}
+      onSubmit={handleSubmit(onSubmit)}
       className="space-y-4 flex flex-col gap-4 border border-gray-300 p-4 rounded-lg bg-blue-50"
       id="veiculoForm"
     >
@@ -105,11 +60,12 @@ const CadastroVeiculos = () => {
         <input
           className="border p-2 rounded-md"
           id="modelo"
-          name="modelo"
-          value={formData.modelo}
-          onChange={handleChange}
+          {...register("modelo")}
           placeholder="Ex: Uno"
         />
+        {errors.modelo && (
+          <p className="text-red-600 text-sm">{errors.modelo.message}</p>
+        )}
       </div>
 
       <div className="flex flex-col">
@@ -117,11 +73,12 @@ const CadastroVeiculos = () => {
         <input
           className="border p-2 rounded-md"
           id="marca"
-          name="marca"
-          value={formData.marca}
-          onChange={handleChange}
+          {...register("marca")}
           placeholder="Ex: Fiat"
         />
+        {errors.marca && (
+          <p className="text-red-600 text-sm">{errors.marca.message}</p>
+        )}
       </div>
 
       <div className="flex flex-col">
@@ -129,13 +86,12 @@ const CadastroVeiculos = () => {
         <input
           className="border p-2 rounded-md"
           id="chassi"
-          name="chassi"
-          value={formData.chassi}
-          minLength={17}
-          maxLength={17}
+          {...register("chassi")}
           placeholder="Digite o número do chassi"
-          onChange={handleChange}
         />
+        {errors.chassi && (
+          <p className="text-red-600 text-sm">{errors.chassi.message}</p>
+        )}
       </div>
 
       <div className="flex flex-col">
@@ -143,13 +99,12 @@ const CadastroVeiculos = () => {
         <input
           className="border p-2 rounded-md"
           id="placa"
-          name="placa"
-          value={formData.placa}
-          minLength={7}
-          maxLength={7}
+          {...register("placa")}
           placeholder="Ex: ABC1D23"
-          onChange={handleChange}
         />
+        {errors.placa && (
+          <p className="text-red-600 text-sm">{errors.placa.message}</p>
+        )}
       </div>
 
       <div className="flex flex-col">
@@ -157,13 +112,12 @@ const CadastroVeiculos = () => {
         <input
           className="border p-2 rounded-md"
           id="renavam"
-          name="renavam"
-          value={formData.renavam}
-          minLength={9}
-          maxLength={11}
+          {...register("renavam")}
           placeholder="Digite o número do Renavam"
-          onChange={handleChange}
         />
+        {errors.renavam && (
+          <p className="text-red-600 text-sm">{errors.renavam.message}</p>
+        )}
       </div>
 
       <div className="flex flex-col">
@@ -171,13 +125,13 @@ const CadastroVeiculos = () => {
         <input
           className="border p-2 rounded-md"
           id="ano_modelo"
-          name="ano_modelo"
-          value={formData.ano_modelo}
-          minLength={4}
+          {...register("ano_modelo", { valueAsNumber: true })}
           placeholder="Ano Modelo"
           type="number"
-          onChange={handleChange}
         />
+        {errors.ano_modelo && (
+          <p className="text-red-600 text-sm">{errors.ano_modelo.message}</p>
+        )}
       </div>
 
       <div className="flex flex-col">
@@ -185,11 +139,12 @@ const CadastroVeiculos = () => {
         <input
           className="border p-2 rounded-md"
           id="cor"
-          name="cor"
-          value={formData.cor}
-          onChange={handleChange}
+          {...register("cor")}
           placeholder="Ex: Preto"
         />
+        {errors.cor && (
+          <p className="text-red-600 text-sm">{errors.cor.message}</p>
+        )}
       </div>
 
       <div className="flex flex-col">
@@ -197,9 +152,7 @@ const CadastroVeiculos = () => {
         <select
           className="border p-2 rounded-md"
           id="combustivel"
-          name="combustivel"
-          value={formData.combustivel}
-          onChange={handleChange}
+          {...register("combustivel")}
         >
           <option value="">Selecione o combustível</option>
           <option value="Gasolina">Gasolina</option>
@@ -208,6 +161,9 @@ const CadastroVeiculos = () => {
           <option value="Flex">Flex</option>
           <option value="Elétrico">Elétrico</option>
         </select>
+        {errors.combustivel && (
+          <p className="text-red-600 text-sm">{errors.combustivel.message}</p>
+        )}
       </div>
 
       <div className="flex flex-col">
@@ -215,12 +171,13 @@ const CadastroVeiculos = () => {
         <input
           className="border p-2 rounded-md"
           id="km"
-          name="km"
-          value={formData.km}
-          onChange={handleChange}
+          {...register("km", { valueAsNumber: true })}
           placeholder="Ex: 45000"
           type="number"
         />
+        {errors.km && (
+          <p className="text-red-600 text-sm">{errors.km.message}</p>
+        )}
       </div>
 
       <div className="flex flex-col">
@@ -228,12 +185,13 @@ const CadastroVeiculos = () => {
         <input
           className="border p-2 rounded-md"
           id="valor_compra"
-          name="valor_compra"
-          value={formData.valor_compra}
-          onChange={handleChange}
+          {...register("valor_compra", { valueAsNumber: true })}
           placeholder="Digite o valor de compra"
           type="number"
         />
+        {errors.valor_compra && (
+          <p className="text-red-600 text-sm">{errors.valor_compra.message}</p>
+        )}
       </div>
 
       <div className="flex flex-col">
@@ -241,33 +199,40 @@ const CadastroVeiculos = () => {
         <input
           className="border p-2 rounded-md"
           id="data_compra"
-          name="data_compra"
-          value={formData.data_compra}
-          onChange={handleChange}
+          {...register("data_compra")}
           type="date"
         />
+        {errors.data_compra && (
+          <p className="text-red-600 text-sm">{errors.data_compra.message}</p>
+        )}
       </div>
       <div className="flex flex-col">
         <label htmlFor="fornecedor">Fornecedor:</label>
         <input
           className="border p-2 rounded-md"
           id="fornecedor"
-          name="fornecedor"
-          value={formData.fornecedor}
-          onChange={handleChange}
+          {...register("fornecedor")}
+          placeholder="Digite o nome do fornecedor"
           type="text"
         />
+        {errors.fornecedor && (
+          <p className="text-red-600 text-sm">{errors.fornecedor.message}</p>
+        )}
       </div>
       <div className="flex flex-col">
         <label htmlFor="cpf_cnpj_fornecedor">CPF/CNPJ:</label>
         <input
           className="border p-2 rounded-md"
           id="cpf_cnpj_fornecedor"
-          name="cpf_cnpj_fornecedor"
-          value={formData.cpf_cnpj_fornecedor}
-          onChange={handleChange}
+          {...register("cpf_cnpj_fornecedor")}
+          placeholder="Digite o CPF/CNPJ do fornecedor"
           type="text"
         />
+        {errors.cpf_cnpj_fornecedor && (
+          <p className="text-red-600 text-sm">
+            {errors.cpf_cnpj_fornecedor.message}
+          </p>
+        )}
       </div>
 
       <button
@@ -293,4 +258,4 @@ const CadastroVeiculos = () => {
   );
 };
 
-export default CadastroVeiculos;
+export default CadastroVeiculo;
